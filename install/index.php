@@ -1,12 +1,12 @@
 <?php
 
-//Lists, Copyright Josh Fradley (http://github.com/joshf/Lists
+//Chore, Copyright Josh Fradley (http://github.com/joshf/Chore
 
 require_once("../assets/version.php");
 
-//Check if Lists has been installed
+//Check if Chore has been installed
 if (file_exists("../config.php")) {
-    die("Information: Lists has already been installed! You can login <a href=\"../login.php\">here</a> or to reinstall the app please delete your config.php file and run this installer again.");
+    die("Information: Chore has already been installed! You can login <a href=\"../login.php\">here</a> or to reinstall the app please delete your config.php file and run this installer again.");
 }
 
 if (isset($_POST["install"])) {
@@ -38,26 +38,22 @@ if (isset($_POST["install"])) {
     }
     
     //Create data table
-    $createdatatable = "CREATE TABLE `data` (
-	`id` smallint(10) NOT NULL,
-    `list` smallint(10) NOT NULL,
-    `item` varchar(300) NOT NULL,
-    `created` date NOT NULL,
-    `complete` int(1) NOT NULL,
-    PRIMARY KEY (`id`)
-    ) ENGINE=MyISAM;";
-	
-    mysqli_query($con, $createdatatable) or die(mysqli_error($con));
-	
-    //Create lists table
-    $createliststable = "CREATE TABLE `lists` (
+    $createitemstable = "CREATE TABLE `items` (
     `id` smallint(10) NOT NULL,
-    `name` varchar(100) NOT NULL,
+    `category` varchar(20) NOT NULL,
+    `highpriority` tinyint(1) NOT NULL,
+    `item` varchar(300) NOT NULL,
+    `details` varchar(300) NOT NULL,
+    `created` date NOT NULL,
+    `has_due` int(11) NOT NULL,
+    `due` date NOT NULL,
+    `completed` tinyint(1) NOT NULL DEFAULT \"0\",
+    `datecompleted` date NOT NULL,
     PRIMARY KEY (`id`)
-    ) ENGINE=MyISAM;";
-    
-    mysqli_query($con, $createliststable) or die(mysqli_error($con));
-    
+    ) ENGINE=InnoDB;";
+	
+    mysqli_query($con, $createitemstable) or die(mysqli_error($con));
+	
     //Create users table
     $createuserstable = "CREATE TABLE `users` (
     `id` smallint(10) NOT NULL,
@@ -68,15 +64,13 @@ if (isset($_POST["install"])) {
     `hash` varchar(200) NOT NULl,
     `api_key` varchar(200) NOT NULl,
     PRIMARY KEY (`id`)
-    ) ENGINE=MyISAM;";
+    ) ENGINE=InnoDB;";
     
     mysqli_query($con, $createuserstable) or die(mysqli_error($con));
 
     //Add keys
-    mysqli_query($con, "ALTER TABLE `data` ADD PRIMARY KEY (`id`)");
     mysqli_query($con, "ALTER TABLE `lists` ADD PRIMARY KEY (`id`)");
     mysqli_query($con, "ALTER TABLE `users` ADD PRIMARY KEY (`id`)");
-    mysqli_query($con, "ALTER TABLE `data` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
     mysqli_query($con, "ALTER TABLE `lists` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
     mysqli_query($con, "ALTER TABLE `users` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
     
@@ -102,10 +96,10 @@ if (isset($_POST["install"])) {
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="../assets/favicon.ico">
-<title>Lists &raquo; Install</title>
+<title>Chore &raquo; Install</title>
 <link rel="apple-touch-icon" href="../assets/icon.png">
 <link rel="stylesheet" href="../assets/bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../assets/css/lists.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../assets/css/chore.css" type="text/css" media="screen">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -116,7 +110,7 @@ if (isset($_POST["install"])) {
 <nav class="navbar navbar-inverse navbar-fixed-top">
 <div class="container-fluid">
 <div class="navbar-header">
-<a class="navbar-brand" href="index.php">Lists</a>
+<a class="navbar-brand" href="index.php">Chore</a>
 </div>
 </div>
 </nav>
@@ -126,14 +120,14 @@ if (isset($_POST["install"])) {
 if (isset($_POST["install"])) {    
  
 ?>
-<p>Lists has been successfully installed. Please delete the "install" folder from your server, as it poses a potential security risk!</p>
+<p>Chore has been successfully installed. Please delete the "install" folder from your server, as it poses a potential security risk!</p>
 <a href="../login.php" class="btn btn-default" role="button">Login</a>
 <?php
 
 } else {
 
 ?>
-<div class="alert alert-info">Welcome to Lists <?php echo $version ?>. Before getting started, we need some information on your database and for you to create an admin user.</div>
+<div class="alert alert-info">Welcome to Chore <?php echo $version ?>. Before getting started, we need some information on your database and for you to create an admin user.</div>
 <form id="installform" method="post" autocomplete="off">
 <div class="form-group">
 <label for="dbhost">Database Host</label>
