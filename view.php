@@ -157,6 +157,7 @@ $(document).ready(function() {
         clear: false,
         pk: 3,
         datepicker: {
+            format: "yyyy-mm-dd",
             startDate: date,
             todayHighlight: true,
             todayBtn: "linked",
