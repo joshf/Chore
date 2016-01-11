@@ -135,6 +135,15 @@ $(document).ready(function() {
             }
         });
     });
+    $("#add").click(function() {
+    	window.location.href = "add.php";
+    });
+    $("#settings").click(function() {
+    	window.location.href = "settings.php";
+    });
+    $("#logout").click(function() {
+    	window.location.href = "logout.php";
+    });
 });
 </script>
 </body>
