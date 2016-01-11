@@ -1,6 +1,6 @@
 <?php
 
-//Lists, Copyright Josh Fradley (http://github.com/joshf/Lists)
+//Chore, Copyright Josh Fradley (http://github.com/joshf/Chore)
 
 if (!file_exists("config.php")) {
     die("Error: Config file not found!");
@@ -101,7 +101,6 @@ if (isset($_POST["pk"])) {
     $pk = mysqli_real_escape_string($con, $_GET["pk"]);
 }
 
-
 if ($action == "add") {
     
     if (empty($item)) {
@@ -144,7 +143,7 @@ if ($action == "add") {
     } elseif ($pk == "4") {
         mysqli_query($con, "UPDATE `items` SET `category` = \"$value\" WHERE `id` = \"$id\"");
     } else {
-        die("Error: Unknown key");
+        die("Error: Unknown key!");
     }
 
     echo "Info: Item edited!";
@@ -181,6 +180,7 @@ if ($action == "add") {
     mysqli_query($con, "DELETE FROM `items` WHERE `id` = \"$id\"");
     
     echo "Info: Item deleted!";
+    
 } elseif ($action == "info") {
     $getitems = mysqli_query($con, "SELECT `id`, `category`, `highpriority`, `item`, `details`, `created`, `has_due`, `due`, `completed`, `datecompleted` FROM `items` WHERE `id` = \"$id\"");
     

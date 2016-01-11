@@ -46,7 +46,7 @@ $resultitemcheck = mysqli_fetch_assoc($itemcheck);
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <link rel="icon" href="assets/favicon.ico">
 <title>Chore &raquo; View</title>
 <link rel="apple-touch-icon" href="assets/icon.png">
@@ -139,7 +139,7 @@ $(document).ready(function() {
     $.fn.editable.defaults.url = "worker.php?action=edit&id=" + id + "";
     $.fn.editable.defaults.savenochange = true;
     $.fn.editable.defaults.highlight = "#5cb85c";
-    $.fn.editable.defaults.toggle = "dblclick";
+    $.fn.editable.defaults.toggle = "click";
     $("#item").editable({
         type: "text",
         pk: 1,
