@@ -150,8 +150,6 @@ $(document).ready(function() {
         pk: 2,
         title: "Details",
     });
-    
-    /* Use moment */ 
     $("#due").editable({
         type: "combodate",
         combodate: {
