@@ -55,7 +55,7 @@ if (isset($_POST["action"])) {
 }
 
 //Check if ID exists
-$actions = array("complete", "restore", "delete", "info", "edit");
+$actions = array("complete", "restore", "delete", "info", "edit", "duein");
 if (in_array($action, $actions)) {
     if (isset($_POST["id"]) || isset($_GET["id"])) {
         if (isset($_POST["action"])) {
@@ -173,7 +173,6 @@ if ($action == "add") {
     
     echo "Info: Item deleted!";
 } elseif ($action == "info") {
-    
     $getitems = mysqli_query($con, "SELECT `id`, `category`, `highpriority`, `item`, `details`, `created`, `has_due`, `due`, `completed`, `datecompleted` FROM `items` WHERE `id` = \"$id\"");
     
     while($item = mysqli_fetch_assoc($getitems)) {
@@ -194,6 +193,33 @@ if ($action == "add") {
     
     }
     echo json_encode(array("data" => $items));
+    
+} elseif ($action == "duein") {
+    $getdue = mysqli_query($con, "SELECT `due` FROM `items` WHERE `id` = \"$id\"");
+    $getdueresults = mysqli_fetch_assoc($getdue); 
+    
+    $today = strtotime(date("Y-m-d"));
+    $due = strtotime($getdueresults["due"]);
+    $datediff = abs($today - $due);
+    $duein = floor($datediff/(60*60*24));
+        
+    if ($today > $due) {
+        if ($duein == "1") {
+            $string = "Overdue by " . $duein . " day";
+        } else {
+            $string = "Overdue by " . $duein . " days";
+        }                    
+    } else {
+        if ($duein == "1") {
+            $string = "Due in " . $duein . " day";
+        } else {
+            $string = "Due in " . $duein . " days";
+        } 
+    }
+    if ($duein == "0") {
+        $string = "Due Today";
+    }  
+    echo "$string";
     
 } elseif ($action == "generateapikey") {
     $api_key = substr(str_shuffle(MD5(microtime())), 0, 50);

@@ -86,7 +86,6 @@ if (mysqli_num_rows($getitems) != 0) {
             if (!empty($item["due"])) {
  
                 $today = strtotime(date("Y-m-d"));
-                $rawdue = $item["due"]; 
                 $due = strtotime($item["due"]);
                 $datediff = abs($today - $due);
                 $duein = floor($datediff/(60*60*24));
@@ -113,9 +112,9 @@ if (mysqli_num_rows($getitems) != 0) {
                         $overdue = "true";
                     }                 
                     if ($overdue == "true") {
-                        echo "<span class=\"text-danger\">";
+                        echo "<span id=\"duein\" class=\"text-danger\">";
                     } else {
-                        "<span>";
+                        echo "<span id=\"duein\">";
                     }
                     echo "($string)</span></p>";
             }
@@ -129,6 +128,7 @@ mysqli_close($con);
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="assets/bower_components/moment.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">  
 $(document).ready(function() {
@@ -150,19 +150,38 @@ $(document).ready(function() {
         pk: 2,
         title: "Details",
     });
-    var date = new Date()
-    date.setDate(date.getDate()-1);    
+    
+    /* Use moment */ 
     $("#due").editable({
-        type: "date",
-        clear: false,
-        pk: 3,
-        datepicker: {
-            format: "yyyy-mm-dd",
-            startDate: date,
-            todayHighlight: true,
-            todayBtn: "linked",
+        type: "combodate",
+        combodate: {
+            minYear: moment().get("year"),
+            maxYear: moment().get("year") + 2,
+            firstItem: "none",
+            smartDays: true
         },
+        pk: 3,
         title: "Due",
+    });
+   $("#due").on("save", function(e, params) {
+        $.ajax({
+            type: "POST",
+            url: "worker.php",
+            data: "action=duein&id="+ id +"",
+            error: function() {
+                console.log("Error: could not connect to worker!");
+            },
+            success: function(duein) {
+                $("#duein").removeClass("text-danger");
+                if(duein.indexOf("Overdue") != -1){
+                    $("#duein").addClass("text-danger");
+                }
+                if(duein.indexOf("Due Today") != -1){
+                    $("#duein").addClass("text-danger");
+                }
+                $("#duein").html("(" + duein + ")");
+            }
+        });
     });
     $("#category").editable({
         type: "select",

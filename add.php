@@ -57,16 +57,22 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 </ol>
 <form id="addform" autocomplete="off">
 <div class="form-group">
+<label for="item">Item</label>
 <input type="text" class="form-control" id="item" name="item" placeholder="Type a item..." required>
 </div>
 <div class="form-group">
+<label for="details">Details</label>
 <textarea class="form-control" id="details" name="details" placeholder="Type any details..." required></textarea>
 </div>
+<div class="hide" id="newcategory_holder">
 <div class="form-group">
-<input type="text" class="form-control hide" id="newcategory" name="newcategory" placeholder="Type a new category..." required>
+<label for="newcategory">Category</label>
+<input type="text" class="form-control" id="newcategory" name="newcategory" placeholder="Type a new category..." required>
+</div>
 </div>
 <div id="category_holder">
 <div class="form-group">
+<label for="category">Category</label>
 <div class="input-group">
 <select class="form-control" id="category" name="category">
 <?php
@@ -129,14 +135,14 @@ $(document).ready(function() {
             var newcategory = $("#newcategory").val();
             if (newcategory !== null && newcategory != "") {                                             
                 $("#category").append("<option value=\"" + newcategory + "\" selected=\"selected\">" + newcategory + "</option>");
-                $("#newcategory").addClass("hide");
+                $("#newcategory_holder").addClass("hide");
                 $("#category_holder").removeClass("hide");                
             }
             event.preventDefault();
         }
     });
     $("#addcategory").click(function() {
-        $("#newcategory").removeClass("hide");
+        $("#newcategory_holder").removeClass("hide");
         $("#newcategory").focus();
         $("#category_holder").addClass("hide");
         
@@ -182,13 +188,13 @@ $(document).ready(function() {
         return false;
     });
     $("#add").click(function() {
-    	window.location.href = "add.php";
+        window.location.href = "add.php";
     });
     $("#settings").click(function() {
-    	window.location.href = "settings.php";
+        window.location.href = "settings.php";
     });
     $("#logout").click(function() {
-    	window.location.href = "logout.php";
+        window.location.href = "logout.php";
     }); 
 });
 </script>
