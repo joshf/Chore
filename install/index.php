@@ -15,8 +15,6 @@ if (isset($_POST["install"])) {
     $dbuser = $_POST["dbuser"];
     $dbpassword = $_POST["dbpassword"];
     $dbname = $_POST["dbname"];
-	$website = $_POST["website"];
-	$pathtoscript = $_POST["pathtoscript"];
     
     $user = $_POST["user"];
     $email = $_POST["email"];
@@ -69,9 +67,9 @@ if (isset($_POST["install"])) {
     mysqli_query($con, $createuserstable) or die(mysqli_error($con));
 
     //Add keys
-    mysqli_query($con, "ALTER TABLE `lists` ADD PRIMARY KEY (`id`)");
+    mysqli_query($con, "ALTER TABLE `items` ADD PRIMARY KEY (`id`)");
     mysqli_query($con, "ALTER TABLE `users` ADD PRIMARY KEY (`id`)");
-    mysqli_query($con, "ALTER TABLE `lists` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
+    mysqli_query($con, "ALTER TABLE `items` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
     mysqli_query($con, "ALTER TABLE `users` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
     
     mysqli_query($con, "INSERT INTO `users` (user, password, salt, email, hash, api_key)
