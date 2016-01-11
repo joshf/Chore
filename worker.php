@@ -77,18 +77,28 @@ if (in_array($action, $actions)) {
 //Define variables
 if (isset($_POST["item"])) {
     $item = mysqli_real_escape_string($con, $_POST["item"]);
+} elseif (isset($_GET["item"])) {
+    $item = mysqli_real_escape_string($con, $_GET["item"]);
 }
 if (isset($_POST["details"])) {
     $details = mysqli_real_escape_string($con, $_POST["details"]);
+} elseif (isset($_GET["details"])) {
+    $details = mysqli_real_escape_string($con, $_GET["details"]);
 }
 if (isset($_POST["category"])) {
     $category = mysqli_real_escape_string($con, $_POST["category"]);
+} elseif (isset($_GET["category"])) {
+    $category = mysqli_real_escape_string($con, $_GET["category"]);
 }
 if (isset($_POST["due"])) {
     $due = mysqli_real_escape_string($con, $_POST["due"]);
+} elseif (isset($_GET["due"])) {
+    $due = mysqli_real_escape_string($con, $_GET["due"]);
 }
 if (isset($_POST["pk"])) {
     $pk = mysqli_real_escape_string($con, $_POST["pk"]);
+} elseif (isset($_GET["pk"])) {
+    $pk = mysqli_real_escape_string($con, $_GET["pk"]);
 }
 
 
@@ -104,7 +114,6 @@ if ($action == "add") {
         $highpriority = "0";
     }
     
-    
     if (empty($due)) {
         $has_due = "0";
     } else {
@@ -114,20 +123,20 @@ if ($action == "add") {
     mysqli_query($con, "INSERT INTO `items` (`category`, `highpriority`, `item`, `details`, `has_due`, `created`, `due`, `completed`, `datecompleted`)
     VALUES (\"$category\",\"$highpriority\",\"$item\",\"$details\",\"$has_due\",CURDATE(),\"$due\",\"0\",\"\")");
     
-    
     echo "Info: Item added!";
     
 } elseif ($action == "edit") {
     
     if (isset($_POST["value"])) {
         $value = mysqli_real_escape_string($con, $_POST["value"]);
+    } elseif (isset($_GET["value"])) {
+        $value = mysqli_real_escape_string($con, $_GET["value"]);
     } else {
         die("Error: Blank value");
     }
     
     if ($pk == "1") {
         mysqli_query($con, "UPDATE `items` SET `item` = \"$value\" WHERE `id` = \"$id\"");
-        echo "called 1";
     } elseif ($pk == "2") {
         mysqli_query($con, "UPDATE `items` SET `details` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "3") {
@@ -142,21 +151,21 @@ if ($action == "add") {
     
 } elseif ($action == "listcats") {
     
-    $getitems = mysqli_query($con, "SELECT DISTINCT(category) FROM `items`");
+    $getcats = mysqli_query($con, "SELECT DISTINCT(category) FROM `items`");
     
-    while($item = mysqli_fetch_assoc($getitems)) {
-        if ($item["category"] == "") {
+    while($cat = mysqli_fetch_assoc($getcats)) {
+        if ($cat["category"] == "") {
             $textcat = "None";
         } else {
-            $textcat = $item["category"];
+            $textcat = $cat["category"];
         }
     
-        $items[] = array(
-            "value" => $item["category"],
+        $cats[] = array(
+            "value" => $cat["category"],
             "text" => $textcat
         );
     }
-    echo json_encode($items);
+    echo json_encode($cats);
 
 } elseif ($action == "complete") {
     mysqli_query($con, "UPDATE `items` SET `completed` = \"1\", `datecompleted` = CURDATE() WHERE `id` = \"$id\"");
@@ -176,7 +185,6 @@ if ($action == "add") {
     $getitems = mysqli_query($con, "SELECT `id`, `category`, `highpriority`, `item`, `details`, `created`, `has_due`, `due`, `completed`, `datecompleted` FROM `items` WHERE `id` = \"$id\"");
     
     while($item = mysqli_fetch_assoc($getitems)) {
-    
         $items[] = array(
             "id" => $item["id"],
             "category" => $item["category"],
@@ -188,16 +196,14 @@ if ($action == "add") {
             "due" => $item["due"],
             "completed" => $item["completed"],
             "datecompleted" => $item["datecompleted"]
-            
         );
-    
     }
+    
     echo json_encode(array("data" => $items));
     
 } elseif ($action == "duein") {
     $getdue = mysqli_query($con, "SELECT `due` FROM `items` WHERE `id` = \"$id\"");
     $getdueresults = mysqli_fetch_assoc($getdue); 
-    
     $today = strtotime(date("Y-m-d"));
     $due = strtotime($getdueresults["due"]);
     $datediff = abs($today - $due);
@@ -218,7 +224,7 @@ if ($action == "add") {
     }
     if ($duein == "0") {
         $string = "Due Today";
-    }  
+    }
     echo "$string";
     
 } elseif ($action == "generateapikey") {
