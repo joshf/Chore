@@ -33,7 +33,7 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 if (isset($_GET["filter"])) {
     $filter = mysqli_real_escape_string($con, $_GET["filter"]);
     //Prevent bad strings from messing with sorting
-    $filters = array("categories", "normal", "highpriority", "completed", "date", "duetoday");
+    $filters = array("categories", "normal", "highpriority", "completed", "date", "duetoday", "overdue");
     if (!in_array($filter, $filters)) {
         $filter = "normal";
     }
@@ -93,6 +93,7 @@ if (isset($_GET["filter"])) {
 <option value="index.php?filter=highpriority">High Priority Tasks</option>
 <option value="index.php?filter=completed">Completed Tasks</option>
 <option value="index.php?filter=duetoday">Due Today</option>
+<option value="index.php?filter=overdue">Overdue</option>
 </optgroup>
 <optgroup label="Categories">
 <?php
@@ -132,6 +133,8 @@ if ($filter == "completed") {
 	$getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `has_due` = \"1\" ORDER BY `due` ASC");
 } elseif ($filter == "duetoday") {
     $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `due` = CURDATE() AND `has_due` = \"1\"");
+} elseif ($filter == "overdue") {
+    $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `due` <= CURDATE() AND `has_due` = \"1\"");
 } else {
     $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\"");
 }
