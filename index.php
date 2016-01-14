@@ -134,7 +134,7 @@ if ($filter == "completed") {
 } elseif ($filter == "duetoday") {
     $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `due` = CURDATE() AND `has_due` = \"1\"");
 } elseif ($filter == "overdue") {
-    $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `due` <= CURDATE() AND `has_due` = \"1\"");
+    $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `due` < CURDATE() AND `has_due` = \"1\"");
 } else {
     $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\"");
 }
