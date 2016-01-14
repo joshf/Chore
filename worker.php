@@ -55,7 +55,7 @@ if (isset($_POST["action"])) {
 }
 
 //Check if ID exists
-$actions = array("complete", "restore", "delete", "info", "edit", "duein");
+$actions = array("complete", "restore", "delete", "info", "edit", "duein", "makehighpriority");
 if (in_array($action, $actions)) {
     if (isset($_POST["id"]) || isset($_GET["id"])) {
         if (isset($_POST["action"])) {
@@ -147,23 +147,26 @@ if ($action == "add") {
     }
 
     echo "Info: Item edited!";
+
+} elseif ($action == "makehighpriority") {
+    
+    mysqli_query($con, "UPDATE `items` SET `highpriority` = \"1\" WHERE `id` = \"$id\"");
+    
+    echo "Info: Item priority updated!";
     
 } elseif ($action == "listcats") {
     
-    $getcats = mysqli_query($con, "SELECT DISTINCT(category) FROM `items`");
+    $getcats = mysqli_query($con, "SELECT DISTINCT(category) FROM `items` WHERE `category` != \"\"");
     
-    while($cat = mysqli_fetch_assoc($getcats)) {
-        if ($cat["category"] == "") {
-            $textcat = "None";
-        } else {
-            $textcat = $cat["category"];
-        }
-    
+    while($cat = mysqli_fetch_assoc($getcats)) {    
         $cats[] = array(
-            "value" => $cat["category"],
-            "text" => $textcat
-        );
+            "text" => $cat["category"],
+            "value" => $cat["category"]
+        );    
     }
+
+    $cats[] = array("text"=> "None", "value" => "");    
+       
     echo json_encode($cats);
 
 } elseif ($action == "complete") {
@@ -199,7 +202,7 @@ if ($action == "add") {
         );
     }
     
-    echo json_encode(array("data" => $items));
+    echo json_encode(array("item" => $items));
     
 } elseif ($action == "duein") {
     $getdue = mysqli_query($con, "SELECT `due` FROM `items` WHERE `id` = \"$id\"");
@@ -225,7 +228,8 @@ if ($action == "add") {
     if ($duein == "0") {
         $string = "Due Today";
     }
-    echo "$string";
+    
+    echo $string;
     
 } elseif ($action == "generateapikey") {
     $api_key = substr(str_shuffle(MD5(microtime())), 0, 50);
