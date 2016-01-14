@@ -119,12 +119,26 @@ if (mysqli_num_rows($getitems) != 0) {
                     echo "($string)</span></p>";
             }
         }
+        echo "<div class=\"btn-group\" role=\"group\">";
+        if ($item["completed"] == "0") {
+            echo "<button type=\"button\" id=\"complete\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-ok\" title=\"Complete\" aria-hidden=\"true\"></span> Complete</button>";
+        } else {
+            echo "<button type=\"button\" id=\"restore\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-repeat\" title=\"Restore\" aria-hidden=\"true\"></span> Restore</button>";
+        }
+        echo "<button type=\"button\" id=\"delete\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-remove\" title=\"Delete\" aria-hidden=\"true\"></span> Delete</button><button type=\"button\" id=\"makehighpriority\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-exclamation-sign\" title=\"High Priority\" aria-hidden=\"true\"></span> Priority</button>";
+        if ($item["category"] == "") {
+            echo "<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-tags\" title=\"Add Category\" aria-hidden=\"true\"></span> Add Category</button>";
+        }
+        if ($item["has_due"] == "0") {
+            echo "<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-calendar\" title=\"Add Due\" aria-hidden=\"true\"></span> Add Due Date</button>";
+        }
+        echo "</div>";
     }
 }
 
 mysqli_close($con);
 
-?>      
+?>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
@@ -150,7 +164,7 @@ $(document).ready(function() {
         pk: 2,
         title: "Details",
     });
-    $("#due").editable({
+    var due = $("#due").editable({
         type: "combodate",
         combodate: {
             minYear: moment().get("year"),
@@ -186,6 +200,59 @@ $(document).ready(function() {
         pk: 4,
         source: "worker.php?action=listcats",
         title: "Category",
+    });
+    $("#complete").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "worker.php",
+            data: "action=complete&id="+ id +"",
+            error: function() {
+                console.log("Error: could not connect to worker!");
+            },
+            success: function() {
+            	window.location.href = "index.php";
+            }
+        });
+    });
+    $("#complete").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "worker.php",
+            data: "action=complete&id="+ id +"",
+            error: function() {
+                console.log("Error: could not connect to worker!");
+            },
+            success: function() {
+            	window.location.href = "index.php";  
+            }
+        });
+    });
+    $("#restore").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "worker.php",
+            data: "action=restore&id="+ id +"",
+            error: function() {
+                console.log("Error: could not connect to worker!");
+            },
+            success: function() {
+            	window.location.href = "index.php";  
+            }
+        });
+    });
+    $("#makehighpriority").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "worker.php",
+            data: "action=makehighpriority&id="+ id +"",
+            error: function() {
+                console.log("Error: could not connect to worker!");
+            },
+            success: function() {
+            	window.location.href = "index.php";
+               
+            }
+        });
     });
     $("#add").click(function() {
     	window.location.href = "add.php";
