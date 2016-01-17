@@ -89,7 +89,6 @@ if (mysqli_num_rows($getitems) != 0) {
                 $due = strtotime($item["due"]);
                 $datediff = abs($today - $due);
                 $duein = floor($datediff/(60*60*24));
-    
                 
                 echo "<p><span class=\"glyphicon glyphicon-calendar\" title=\"Due\" aria-hidden=\"true\"></span> <span id=\"due\">" . $item["due"] . "</span> ";
                 
@@ -125,14 +124,7 @@ if (mysqli_num_rows($getitems) != 0) {
         } else {
             echo "<button type=\"button\" id=\"restore\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-repeat\" title=\"Restore\" aria-hidden=\"true\"></span> Restore</button>";
         }
-        echo "<button type=\"button\" id=\"delete\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-remove\" title=\"Delete\" aria-hidden=\"true\"></span> Delete</button><button type=\"button\" id=\"makehighpriority\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-exclamation-sign\" title=\"High Priority\" aria-hidden=\"true\"></span> Priority</button>";
-        if ($item["category"] == "") {
-            echo "<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-tags\" title=\"Add Category\" aria-hidden=\"true\"></span> Add Category</button>";
-        }
-        if ($item["has_due"] == "0") {
-            echo "<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-calendar\" title=\"Add Due\" aria-hidden=\"true\"></span> Add Due Date</button>";
-        }
-        echo "</div>";
+        echo "<button type=\"button\" id=\"delete\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-remove\" title=\"Delete\" aria-hidden=\"true\"></span> Delete</button></div>";
     }
 }
 
@@ -201,11 +193,11 @@ $(document).ready(function() {
         source: "worker.php?action=listcats",
         title: "Category",
     });
-    $("#complete").click(function() {
+    $("#delete").click(function() {
         $.ajax({
             type: "POST",
             url: "worker.php",
-            data: "action=complete&id="+ id +"",
+            data: "action=delete&id="+ id +"",
             error: function() {
                 console.log("Error: could not connect to worker!");
             },
@@ -223,7 +215,7 @@ $(document).ready(function() {
                 console.log("Error: could not connect to worker!");
             },
             success: function() {
-            	window.location.href = "index.php";  
+            	window.location.href = "index.php";
             }
         });
     });
@@ -237,20 +229,6 @@ $(document).ready(function() {
             },
             success: function() {
             	window.location.href = "index.php";  
-            }
-        });
-    });
-    $("#makehighpriority").click(function() {
-        $.ajax({
-            type: "POST",
-            url: "worker.php",
-            data: "action=makehighpriority&id="+ id +"",
-            error: function() {
-                console.log("Error: could not connect to worker!");
-            },
-            success: function() {
-            	window.location.href = "index.php";
-               
             }
         });
     });

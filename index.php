@@ -33,7 +33,7 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 if (isset($_GET["filter"])) {
     $filter = mysqli_real_escape_string($con, $_GET["filter"]);
     //Prevent bad strings from messing with sorting
-    $filters = array("categories", "normal", "highpriority", "completed", "date", "duetoday", "overdue");
+    $filters = array("categories", "normal", "highpriority", "completed", "date", "duetoday", "overdue", "created");
     if (!in_array($filter, $filters)) {
         $filter = "normal";
     }
@@ -96,16 +96,11 @@ if (isset($_GET["filter"])) {
 <option value="index.php?filter=overdue">Overdue</option>
 </optgroup>
 <optgroup label="Categories">
+<option value="index.php?filter=categories&amp;cat=none">No Category</option>
 <?php
 
-//Don't duplicate none entry
-$doesnoneexist = mysqli_query($con, "SELECT `category` FROM `items` WHERE `category` = \"none\"");
-if (mysqli_num_rows($doesnoneexist) == 0) {
-    echo "<option value=\"index.php?filter=categories&amp;cat=none\">No Category</option>";
-}
-
 //Get categories
-$getcategories = mysqli_query($con, "SELECT DISTINCT(category) FROM `items` WHERE `category` != \"\"");
+$getcategories = mysqli_query($con, "SELECT DISTINCT(category) FROM `items` WHERE `category` != \"\" AND `completed` = \"0\"");
 
 while($task = mysqli_fetch_assoc($getcategories)) {
         echo "<option value=\"index.php?filter=categories&amp;cat=" . $task["category"] . "\">" . ucfirst($task["category"]) . "</option>";
@@ -115,6 +110,7 @@ while($task = mysqli_fetch_assoc($getcategories)) {
 </optgroup>
 <optgroup label="Sort">
 <option value="index.php?filter=date">Due Date</option>
+<option value="index.php?filter=created">Created Date</option>
 </optgroup>
 </select>
 </div>
@@ -135,9 +131,11 @@ if ($filter == "completed") {
     $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `due` = CURDATE() AND `has_due` = \"1\"");
 } elseif ($filter == "overdue") {
     $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `due` < CURDATE() AND `has_due` = \"1\"");
+} elseif ($filter == "created") {
+	$getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" ORDER BY `created` ASC");
 } else {
     $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\"");
-}
+} 
 
 if (mysqli_num_rows($getitems) != 0) {
     while($item = mysqli_fetch_assoc($getitems)) {
@@ -148,28 +146,25 @@ if (mysqli_num_rows($getitems) != 0) {
         
         echo "<li class=\"list-group-item\"><span class=\"list\" data-id=\"" . $item["id"] . "\">";
         
-        if ($today >= $due) { 
-            if ($item["has_due"] == "1") {
-                echo "<b><span class=\"text-danger\">" . $item["item"] . "</span></b>";
-            } else {
-                echo "" . $item["item"] . ""; 
-            }
-        } else {
+  
             if ($item["highpriority"] == "1") {
                echo "<b>" . $item["item"] . "</b>"; 
             } else {
                 echo "" . $item["item"] . ""; 
             }
-        }
+        
         
         echo "</span><div class=\"pull-right\">";
-        if ($item["category"] != "") {
-            echo "<span class=\"hidden-xs badge\">" . $item["category"] . "</span> ";
-        }
         if ($item["has_due"] == "1") {
-            echo "<span class=\"hidden-xs badge\">" . $item["due"] . "</span> ";
+            if ($today >= $due) {
+                echo "<span class=\"hidden-xs badge badge-red\">" . $item["due"] . "</span> ";
+            } else {
+                echo "<span class=\"hidden-xs badge\">" . $item["due"] . "</span> ";
+            }            
         }
-        
+        if ($item["category"] != "") {
+            echo "<span class=\"hidden-xs badge badge-blue\">" . $item["category"] . "</span> ";
+        }
         echo "<span class=\"complete glyphicon glyphicon-ok\" data-id=\"" . $item["id"] . "\"></span></div></li>";
     }
 } else {

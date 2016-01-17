@@ -55,7 +55,7 @@ if (isset($_POST["action"])) {
 }
 
 //Check if ID exists
-$actions = array("complete", "restore", "delete", "info", "edit", "duein", "makehighpriority");
+$actions = array("complete", "restore", "delete", "info", "edit", "duein", "togglehighpriority");
 if (in_array($action, $actions)) {
     if (isset($_POST["id"]) || isset($_GET["id"])) {
         if (isset($_POST["action"])) {
@@ -119,6 +119,15 @@ if ($action == "add") {
         $has_due = "1";
     }
     
+    $datecheck = "/\d{1,2}\-\d{1,2}\-\d{4}/";
+    if (preg_match($datecheck, $due)) {
+        $segments = explode("-", $due);
+        if (count($segments) == 3) {
+            list($day, $month, $year) = $segments;
+        }
+        $due = "$year-$month-$day";
+    }
+    
     mysqli_query($con, "INSERT INTO `items` (`category`, `highpriority`, `item`, `details`, `has_due`, `created`, `due`, `completed`, `datecompleted`)
     VALUES (\"$category\",\"$highpriority\",\"$item\",\"$details\",\"$has_due\",CURDATE(),\"$due\",\"0\",\"\")");
     
@@ -139,6 +148,16 @@ if ($action == "add") {
     } elseif ($pk == "2") {
         mysqli_query($con, "UPDATE `items` SET `details` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "3") {
+        
+        $datecheck = "/\d{1,2}\-\d{1,2}\-\d{4}/";
+        if (preg_match($datecheck, $value)) {
+            $segments = explode("-", $value);
+            if (count($segments) == 3) {
+                list($day, $month, $year) = $segments;
+            }
+            $value = "$year-$month-$day";
+        }
+        
         mysqli_query($con, "UPDATE `items` SET `due` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "4") {
         mysqli_query($con, "UPDATE `items` SET `category` = \"$value\" WHERE `id` = \"$id\"");
@@ -148,12 +167,6 @@ if ($action == "add") {
 
     echo "Info: Item edited!";
 
-} elseif ($action == "makehighpriority") {
-    
-    mysqli_query($con, "UPDATE `items` SET `highpriority` = \"1\" WHERE `id` = \"$id\"");
-    
-    echo "Info: Item priority updated!";
-    
 } elseif ($action == "listcats") {
     
     $getcats = mysqli_query($con, "SELECT DISTINCT(category) FROM `items` WHERE `category` != \"\"");
