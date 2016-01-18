@@ -37,24 +37,24 @@ if (isset($_POST["install"])) {
     
     //Create data table
     $createitemstable = "CREATE TABLE `items` (
-    `id` smallint(10) NOT NULL,
+    `id` int(8) NOT NULL,
     `category` varchar(20) NOT NULL,
     `highpriority` tinyint(1) NOT NULL,
     `item` varchar(300) NOT NULL,
     `details` varchar(300) NOT NULL,
     `created` date NOT NULL,
-    `has_due` int(11) NOT NULL,
+    `has_due` tinyint(1)  NOT NULL DEFAULT \"0\",
     `due` date NOT NULL,
     `completed` tinyint(1) NOT NULL DEFAULT \"0\",
     `datecompleted` date NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB;";
-	
+    
     mysqli_query($con, $createitemstable) or die(mysqli_error($con));
 	
     //Create users table
     $createuserstable = "CREATE TABLE `users` (
-    `id` smallint(10) NOT NULL,
+    `id` int(8) NOT NULL,
     `user` varchar(20) NOT NULL,
     `password` varchar(200) NOT NULL,
     `salt` varchar(3) NOT NULL,
