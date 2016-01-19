@@ -77,10 +77,7 @@ if (mysqli_num_rows($getitems) != 0) {
         echo "<p><span class=\"glyphicon glyphicon-pencil\" title=\"Item\" aria-hidden=\"true\"></span> <span id=\"item\">" . $item["item"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-zoom-in\" title=\"Details\" aria-hidden=\"true\"></span> <span id=\"details\">" . $item["details"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-info-sign\" title=\"Created\" aria-hidden=\"true\"></span> <span id=\"created\">" . $item["created"] . "</span></p>";
-  
-        if (!empty($item["category"])) {
-            echo "<p><span class=\"glyphicon glyphicon-tags\" title=\"Category\" aria-hidden=\"true\"></span> <span id=\"category\">" . $item["category"] . "</span></p>";
-        }
+        echo "<p><span class=\"glyphicon glyphicon-tags\" title=\"Category\" aria-hidden=\"true\"></span> <span id=\"category\">" . $item["category"] . "</span></p>";
         
         if ($item["has_due"] == "1") {
             if (!empty($item["due"])) {
@@ -156,7 +153,7 @@ $(document).ready(function() {
         pk: 2,
         title: "Details",
     });
-    var due = $("#due").editable({
+    $("#due").editable({
         type: "combodate",
         combodate: {
             minYear: moment().get("year"),
@@ -186,9 +183,10 @@ $(document).ready(function() {
                 $("#duein").html("(" + duein + ")");
             }
         });
-    });
+    });   
     $("#category").editable({
         type: "select",
+        value: $("#category").html(),
         pk: 4,
         source: "worker.php?action=listcats",
         title: "Category",
