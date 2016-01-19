@@ -158,7 +158,7 @@ if ($action == "add") {
             $value = "$year-$month-$day";
         }
         
-        mysqli_query($con, "UPDATE `items` SET `due` = \"$value\" WHERE `id` = \"$id\"");
+        mysqli_query($con, "UPDATE `items` SET `has_due` = \"1\", `due` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "4") {
         mysqli_query($con, "UPDATE `items` SET `category` = \"$value\" WHERE `id` = \"$id\"");
     } else {

@@ -73,48 +73,62 @@ $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `id` = \"$itemid\"")
 
 if (mysqli_num_rows($getitems) != 0) {
     while($item = mysqli_fetch_assoc($getitems)) {
+        echo "<p><span class=\"glyphicon glyphicon-tasks\" title=\"Item\" aria-hidden=\"true\"></span> <span id=\"item\">" . $item["item"] . "</span>";
         
-        echo "<p><span class=\"glyphicon glyphicon-pencil\" title=\"Item\" aria-hidden=\"true\"></span> <span id=\"item\">" . $item["item"] . "</span></p>";
+        if ($item["highpriority"] == "1") {
+            echo " <span id=\"highpriority\" class=\"text-danger\">(High Priority)</span>";            
+        }
+        
+        echo "</p>";
+    
         echo "<p><span class=\"glyphicon glyphicon-zoom-in\" title=\"Details\" aria-hidden=\"true\"></span> <span id=\"details\">" . $item["details"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-info-sign\" title=\"Created\" aria-hidden=\"true\"></span> <span id=\"created\">" . $item["created"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-tags\" title=\"Category\" aria-hidden=\"true\"></span> <span id=\"category\">" . $item["category"] . "</span></p>";
-        
-        if ($item["has_due"] == "1") {
-            if (!empty($item["due"])) {
+       
  
-                $today = strtotime(date("Y-m-d"));
-                $due = strtotime($item["due"]);
-                $datediff = abs($today - $due);
-                $duein = floor($datediff/(60*60*24));
-                
-                echo "<p><span class=\"glyphicon glyphicon-calendar\" title=\"Due\" aria-hidden=\"true\"></span> <span id=\"due\">" . $item["due"] . "</span> ";
-                
-                    if ($today > $due) {
-                        if ($duein == "1") {
-                            $string = "Overdue by " . $duein . " day";
-                        } else {
-                            $string = "Overdue by " . $duein . " days";
-                        }                    
-                        $overdue = "true";
-                    } else {
-                        if ($duein == "1") {
-                            $string = "Due in " . $duein . " day";
-                        } else {
-                            $string = "Due in " . $duein . " days";
-                        } 
-                    }
-                    if ($duein == "0") {
-                        $string = "Due Today";
-                        $overdue = "true";
-                    }                 
-                    if ($overdue == "true") {
-                        echo "<span id=\"duein\" class=\"text-danger\">";
-                    } else {
-                        echo "<span id=\"duein\">";
-                    }
-                    echo "($string)</span></p>";
-            }
+        $today = strtotime(date("Y-m-d"));
+        $rawdue = $item["due"];
+        $due = strtotime($item["due"]);
+        $datediff = abs($today - $due);
+        $duein = floor($datediff/(60*60*24));
+        
+              
+        if ($item["has_due"] != "1") {
+            $rawdue = "";
         }
+        
+        echo "<p><span class=\"glyphicon glyphicon-calendar\" title=\"Due\" aria-hidden=\"true\"></span> <span id=\"due\">" . $rawdue . "</span> ";
+          
+        if ($item["has_due"] == "1") {
+            
+            if ($today > $due) {
+                if ($duein == "1") {
+                    $string = "Overdue by " . $duein . " day";
+                } else {
+                    $string = "Overdue by " . $duein . " days";
+                }                    
+                $overdue = "true";
+            } else {
+                if ($duein == "1") {
+                    $string = "Due in " . $duein . " day";
+                } else {
+                    $string = "Due in " . $duein . " days";
+                } 
+            }
+            if ($duein == "0") {
+                $string = "Due Today";
+                $overdue = "true";
+            }                 
+            if ($overdue == "true") {
+                echo "<span id=\"duein\" class=\"text-danger\">";
+            } else {
+                echo "<span id=\"duein\">";
+            }
+            echo "($string)</span></p>";
+        } else {
+            echo "<span id=\"duein\">";
+        }
+        
         echo "<div class=\"btn-group\" role=\"group\">";
         if ($item["completed"] == "0") {
             echo "<button type=\"button\" id=\"complete\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-ok\" title=\"Complete\" aria-hidden=\"true\"></span> Complete</button>";
