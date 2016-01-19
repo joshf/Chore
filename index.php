@@ -43,11 +43,12 @@ if (isset($_GET["filter"])) {
 		    $cat = mysqli_real_escape_string($con, $_GET["cat"]);
             if ($cat == "none") {
                 $cat = "";
+            } else {
+    		    $checkcatexists = mysqli_query($con, "SELECT `category` FROM `items` WHERE `category` = \"$cat\"");
+    		    if (mysqli_num_rows($checkcatexists) == 0) {
+    		        $filter = "normal";                
+    		    }
             }
-		    $checkcatexists = mysqli_query($con, "SELECT `category` FROM `items` WHERE `category` = \"$cat\"");
-		    if (mysqli_num_rows($checkcatexists) == 0) {
-		        $filter = "normal";
-		    }
 		} else {
 			$filter = "normal";
 		}
