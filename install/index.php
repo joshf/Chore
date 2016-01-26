@@ -84,6 +84,11 @@ if (isset($_POST["install"])) {
     fwrite($configfile, $installstring);
     fclose($configfile);
     
+    //Write Version
+    $installversion = fopen("../.version", "w");
+    fwrite($installversion, $version);
+    fclose($installversion);
+    
 }
 
 ?>
