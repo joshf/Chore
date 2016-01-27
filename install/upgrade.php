@@ -11,19 +11,20 @@ if (!file_exists("../config.php")) {
 
 require_once("../config.php");
 
-$installedversion = file_get_contents("../.version");
+$installedversion = trim(file_get_contents("../.version"));
 $comparison = version_compare($version, $installedversion);
 
-if ($comparison == "1") {
-    $state = "upgrade";
-} elseif ($comparison == "0") {
-    $state = "uptodate";
+if (isset($_GET["start"])) {
+    if ($comparison == "1") {
+        $state = "upgrade";
+    } elseif ($comparison == "0") {
+        $state = "noupgrade";
+    }
+    if (isset($_GET["force"])) {
+        $state = "upgrade";
+    }
 } else {
-    $state = "mismatch";
-}
-
-if (isset($_GET["force"])) {
-    $state = "upgrade";
+    $state = "welcome";   
 }
 
 ?>
@@ -54,7 +55,16 @@ if (isset($_GET["force"])) {
 </nav>
 <div class="container-fluid top-pad">
 <?php
-if ($state == "upgrade") {
+
+if ($state == "welcome") {
+    
+?>
+<div class="alert alert-info">
+<h4 class="alert-heading">Upgrade Available</h4>
+<p>Your version of chore need an upgrade. To start the upgrade click "Start Upgrade"<p><a href="?start" class="btn btn-info">Start Upgrade</a></p>
+<?php
+
+} elseif ($state == "upgrade") {
     
     //Connect to database
     @$con = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -75,17 +85,18 @@ if ($state == "upgrade") {
 <h4 class="alert-heading">Upgrade Complete</h4>
 <p>Chore has been successfully upgraded to version <?php echo $version; ?>.<p><a href="../login.php" class="btn btn-success">Go To Login</a></p>
 <?
-} elseif ($state == "uptodate") {
+} elseif ($state == "noupgrade") {
 ?>
 <div class="alert alert-info">
 <h4 class="alert-heading">No upgrade required</h4>
-<p>Chore is already up to date<p><a href="../login.php" class="btn btn-info">Go To Login</a></p>
+<p>Chore is already up to date and does not require an upgrade<p><a href="../login.php" class="btn btn-info">Go To Login</a></p>
 <?php
 } else {    
 ?>
 <div class="alert alert-danger">
 <h4 class="alert-heading">Upgrade Error</h4>
-<p>Upgrade error, version mismatch<p><a href="../login.php" class="btn btn-danger">Go To Login</a></p>
+<p>Upgrade error <small>(Installed: <?php echo $installedversion; ?>, packaged <?php echo $version; ?>)</small><p>
+<a href="../login.php" class="btn btn-danger">Go To Login</a></p>
 <?php
 }
 ?>
