@@ -176,6 +176,7 @@ mysqli_close($con);
 
 ?>      
 </ul>
+<span id="update"></span>
 <span class="pull-right text-muted"><small>Version <?php echo $version; ?></small></span>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -187,30 +188,13 @@ mysqli_close($con);
 $(document).ready(function () {
     var chore_version = "<?php echo $version; ?>";
     if (!Cookies.get("chore_didcheckforupdates")) {
-        $.getJSON("https://api.github.com/repos/joshf/Chore/releases").done(function(resp) {
+        $.getJSON("https://api.github.com/repos/joshf/Burden/releases").done(function(resp) {
             var data = resp[0];
             var chore_remote_version = data.tag_name;
             var url = data.zipball_url;
             if (chore_version < chore_remote_version) {
-                bootbox.dialog({
-                    message: "Chore " + chore_remote_version + " is available. For more information about this update click <a href=\""+ data.html_url + "\" target=\"_blank\">here</a>. Do you wish to download the update? If you click \"Not Now\" you will be not reminded for another 7 days.",
-                    title: "Update Available",
-                    buttons: {
-                        cancel: {
-                            label: "Not Now",
-                            callback: function() {
-                                Cookies.set("chore_didcheckforupdates", "1", { expires: 7 });
-                            }
-                        },
-                        main: {
-                            label: "Download Update",
-                            className: "btn-primary",
-                            callback: function() {
-                                window.location.href = data.zipball_url;
-                            }
-                        }
-                    }
-                });
+                $("#update").append("Version " + chore_remote_version + " is now available, click <a href=\"\">here</a> to update.")
+                Cookies.set("chore_didcheckforupdates", "1", { expires: 1 });
             }
         });
     }

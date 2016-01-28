@@ -83,16 +83,16 @@ if (isset($_GET["login_error"])) {
 }
 ?>
 <label for="username" class="sr-only">Username</label>
-<input type="text" id="username" name="username" class="form-control" placeholder="Username..." required autofocus>
+<input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
 <label for="password" class="sr-only">Password</label>
-<input type="password" id="password" name="password" class="form-control" placeholder="Password..." required>
+<input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
 <div class="checkbox">
 <label>
-<input type="checkbox" value="remember-me"> Remember me
+<input type="checkbox" value="remember-me"> Remember Me
 </label>
 <a class="pull-right btn btn-default btn-xs" href="reset.php">Reset</a>
 </div>
-<button class="btn btn-primary btn-block" type="submit">Sign in</button>
+<button class="btn btn-primary btn-block" type="submit">Sign In</button>
 </form>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
