@@ -57,22 +57,22 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 </ol>
 <form id="addform" autocomplete="off">
 <div class="form-group">
-<label for="item">Item</label>
+<label class="control-label" for="item">Item</label>
 <input type="text" class="form-control" id="item" name="item" placeholder="Type a item..." required>
 </div>
 <div class="form-group">
-<label for="details">Details</label>
-<textarea class="form-control" id="details" name="details" placeholder="Type any details..." required></textarea>
+<label class="control-label" for="details">Details</label>
+<textarea class="form-control" id="details" name="details" placeholder="Type any extra details..." required></textarea>
 </div>
-<div class="hide" id="newcategory_holder">
+<div class="hidden" id="newcategory_holder">
 <div class="form-group">
-<label for="newcategory">Category</label>
+<label class="control-label" for="newcategory">Category</label>
 <input type="text" class="form-control" id="newcategory" name="newcategory" placeholder="Type a new category..." required>
 </div>
 </div>
 <div id="category_holder">
 <div class="form-group">
-<label for="category">Category</label>
+<label class="control-label" for="category">Category</label>
 <div class="input-group">
 <select class="form-control" id="category" name="category">
 <?php
@@ -98,7 +98,7 @@ while($task = mysqli_fetch_assoc($getcategories)) {
 </div>
 </div>
 </div>
-<div class="checkbox">
+<div class="checkbox">    
 <label>
 <input type="checkbox" id="has_due" name="has_due"> Due date required
 </label>
@@ -126,8 +126,10 @@ $(document).ready(function() {
     $("#has_due").click(function() {
         if ($(this).is(":checked")) {
             $("#due").prop("disabled", false);
+            $("#due").prop("required", true);            
         } else {
             $("#due").prop("disabled", true);
+            $("#due").prop("required", false);
         }
     });
     $("#newcategory").on("keydown", function(e) {
@@ -135,16 +137,16 @@ $(document).ready(function() {
             var newcategory = $("#newcategory").val();
             if (newcategory !== null && newcategory != "") {                                             
                 $("#category").append("<option value=\"" + newcategory + "\" selected=\"selected\">" + newcategory + "</option>");
-                $("#newcategory_holder").addClass("hide");
-                $("#category_holder").removeClass("hide");                
+                $("#newcategory_holder").addClass("hidden");
+                $("#category_holder").removeClass("hidden");                
             }
             event.preventDefault();
         }
     });
     $("#addcategory").click(function() {
-        $("#newcategory_holder").removeClass("hide");
+        $("#newcategory_holder").removeClass("hidden");
         $("#newcategory").focus();
-        $("#category_holder").addClass("hide");
+        $("#category_holder").addClass("hidden");
         
     });
     if (!Modernizr.inputtypes.date) {
