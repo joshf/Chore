@@ -135,7 +135,7 @@ if (mysqli_num_rows($getitems) != 0) {
         } else {
             echo "<button type=\"button\" id=\"restore\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-repeat\" title=\"Restore\" aria-hidden=\"true\"></span> Restore</button>";
         }
-        echo "<button type=\"button\" id=\"delete\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-remove\" title=\"Delete\" aria-hidden=\"true\"></span> Delete</button></div>";
+        echo "<button type=\"button\" id=\"delete\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-trash\" title=\"Delete\" aria-hidden=\"true\"></span> Delete</button></div>";
     }
 }
 

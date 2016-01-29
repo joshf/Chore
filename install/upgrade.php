@@ -61,7 +61,7 @@ if ($state == "welcome") {
 ?>
 <div class="alert alert-info">
 <h4 class="alert-heading">Upgrade Available</h4>
-<p>Your version of chore need an upgrade. To start the upgrade click "Start Upgrade"<p><a href="?start" class="btn btn-info">Start Upgrade</a></p>
+<p>Your version of chore need an upgrade. To start the upgrade click "Start Upgrade"<p><a href="?start" class="btn btn-info"><span class="glyphicon glyphicon-transfer" title="Start Upgrade" aria-hidden="true"></span> Start Upgrade</a></p>
 <?php
 
 } elseif ($state == "upgrade") {
@@ -83,13 +83,13 @@ if ($state == "welcome") {
 ?>
 <div class="alert alert-success">
 <h4 class="alert-heading">Upgrade Complete</h4>
-<p>Chore has been successfully upgraded to version <?php echo $version; ?>.<p><a href="../login.php" class="btn btn-success">Go To Login</a></p>
+<p>Chore has been successfully upgraded to version <?php echo $version; ?>.<p><a href="../login.php" class="btn btn-success"><span class="glyphicon glyphicon-log-in" title="Login" aria-hidden="true"></span> Go To Login</a></p>
 <?
 } elseif ($state == "noupgrade") {
 ?>
 <div class="alert alert-info">
 <h4 class="alert-heading">No upgrade required</h4>
-<p>Chore is already up to date and does not require an upgrade<p><a href="../login.php" class="btn btn-info">Go To Login</a></p>
+<p>Chore is already up to date and does not require an upgrade<p><a href="../login.php" class="btn btn-info"><span class="glyphicon glyphicon-log-in" title="Login" aria-hidden="true"></span> Go To Login</a></p>
 <?php
 } else {    
 ?>

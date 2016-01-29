@@ -133,35 +133,35 @@ if (isset($_POST["install"])) {
 <div class="alert alert-info">Welcome to Chore <?php echo $version ?>. Before getting started, we need some information on your database and for you to create an admin user.</div>
 <form id="installform" method="post" autocomplete="off">
 <div class="form-group">
-<label for="dbhost">Database Host</label>
+<label class="control-label" for="dbhost">Database Host</label>
 <input type="text" class="form-control" id="dbhost" name="dbhost" value="localhost" placeholder="Type your database host..." required>
 </div>
 <div class="form-group">
-<label for="dbuser">Database User</label>
+<label class="control-label" for="dbuser">Database User</label>
 <input type="text" class="form-control" id="dbuser" name="dbuser" placeholder="Type your database user..." required>
 </div>
 <div class="form-group">
-<label for="dbpassword">Database Password</label>
+<label class="control-label" for="dbpassword">Database Password</label>
 <input type="password" class="form-control" id="dbpassword" name="dbpassword" placeholder="Type your database password..." required>
 </div>
 <div class="form-group">
-<label for="dbname">Database Name</label>
+<label class="control-label" for="dbname">Database Name</label>
 <input type="text" class="form-control" id="dbname" name="dbname" placeholder="Type your database name..." required>
 </div>
 <div class="form-group">
-<label for="user">User</label>
+<label class="control-label" for="user">User</label>
 <input type="text" class="form-control" id="user" name="user" placeholder="Type a username..." required>
 </div>
 <div class="form-group">
-<label for="email">Email</label>
+<label class="control-label" for="email">Email</label>
 <input type="email" class="form-control" id="email" name="email" placeholder="Type an email..." required>
 </div>
 <div class="form-group">
-<label for="password">Password</label>
+<label class="control-label" for="password">Password</label>
 <input type="password" class="form-control" id="password" name="password" placeholder="Type a password..." required>
 </div>
 <input type="hidden" name="install">
-<input type="submit" class="btn btn-default" value="Install">
+<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-floppy-save" title="Install" aria-hidden="true"></span> Install</button>
 </form>
 <br>
 <?php

@@ -112,7 +112,7 @@ while($task = mysqli_fetch_assoc($getcategories)) {
 </label>
 </div>
 <input type="hidden" id="action" name="action" value="add">
-<button type="submit" class="btn btn-default">Add</button>
+<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign" title="Add" aria-hidden="true"></span> Add</button>
 </form>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>

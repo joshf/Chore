@@ -94,15 +94,15 @@ mysqli_close($con);
 <label class="control-label" for="password">Password</label>
 <input type="password" class="form-control" id="password" name="password" value="<?php echo $resultgetusersettings["password"]; ?>" placeholder="Enter a password..." required>
 </div>
-<button type="submit" class="btn btn-default">Update</button>
+<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-save" title="Update" aria-hidden="true"></span> Update</button>
 </form>
 <hr>
 <h2>API key</h2>
 <p>Your API key is: <b><span id="api_key"><?php echo $resultgetusersettings["api_key"]; ?></span></b></p>
-<button id="generateapikey" class="btn btn-default">Generate New Key</button>
+<button id="generateapikey" class="btn btn-default"><span class="glyphicon glyphicon-lock" title="Generate New Key" aria-hidden="true"></span> Generate New Key</button>
 <h2>Version</h2>
 <span id="update"><p>Your have Chore version <?php echo $version; ?></p></span>
-<button id="checkforupdates" class="btn btn-default">Check For Update</button>
+<button id="checkforupdates" class="btn btn-default"><span class="glyphicon glyphicon-refresh" title="Check For Update" aria-hidden="true"></span> Check For Update</button>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
