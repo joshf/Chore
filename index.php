@@ -193,7 +193,7 @@ $(document).ready(function () {
             var chore_remote_version = data.tag_name;
             var url = data.zipball_url;
             if (chore_version < chore_remote_version) {
-                $("#update").append("Version " + chore_remote_version + " is now available, click <a href=\"\">here</a> to update.")
+                $("#update").append("Version " + chore_remote_version + " is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\">here</a> to update.")
                 Cookies.set("chore_didcheckforupdates", "1", { expires: 1 });
             }
         });
