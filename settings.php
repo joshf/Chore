@@ -2,6 +2,8 @@
 
 //Chore, Copyright Josh Fradley (http://github.com/joshf/Chore)
 
+require_once("assets/version.php");
+
 if (!file_exists("config.php")) {
     die("Error: Config file not found!");
 }
@@ -98,6 +100,9 @@ mysqli_close($con);
 <h2>API key</h2>
 <p>Your API key is: <b><span id="api_key"><?php echo $resultgetusersettings["api_key"]; ?></span></b></p>
 <button id="generateapikey" class="btn btn-default">Generate New Key</button>
+<h2>Version</h2>
+<span id="update"><p>Your have Chore version <?php echo $version; ?></p></span>
+<button id="checkforupdates" class="btn btn-default">Check For Update</button>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
@@ -106,6 +111,7 @@ mysqli_close($con);
 <script src="assets/bower_components/js-cookie/src/js.cookie.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+    var chore_version = "<?php echo $version; ?>";
     if (Cookies.get("chore_settings_updated")) {
         $.notify({
             message: "Settings updated!",
@@ -132,6 +138,18 @@ $(document).ready(function() {
             },
             success: function(api_key) {
                 $("#api_key").html(api_key);
+            }
+        });
+    });
+    $("#checkforupdates").click(function() {
+        $.getJSON("https://api.github.com/repos/joshf/Chore/releases").done(function(resp) {
+            var data = resp[0];
+            var chore_remote_version = data.tag_name;
+            var url = data.zipball_url;
+            if (chore_version < chore_remote_version) {
+                $("#update").html("<p>Version " + chore_remote_version + " is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\" target=\"_blank\">here</a> to for instructions on how to update.</p>")
+            } else {
+                $("#update").html("<p>No update available</p>")
             }
         });
     });

@@ -183,17 +183,16 @@ mysqli_close($con);
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/js-cookie/src/js.cookie.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="assets/bower_components/bootbox.js/bootbox.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">  
 $(document).ready(function () {
     var chore_version = "<?php echo $version; ?>";
     if (!Cookies.get("chore_didcheckforupdates")) {
-        $.getJSON("https://api.github.com/repos/joshf/Burden/releases").done(function(resp) {
+        $.getJSON("https://api.github.com/repos/joshf/Chore/releases").done(function(resp) {
             var data = resp[0];
             var chore_remote_version = data.tag_name;
             var url = data.zipball_url;
             if (chore_version < chore_remote_version) {
-                $("#update").append("Version " + chore_remote_version + " is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\">here</a> to update.")
+                $("#update").append("Version " + chore_remote_version + " is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\" target=\"_blank\">here</a> to for instructions on how to update.")
                 Cookies.set("chore_didcheckforupdates", "1", { expires: 1 });
             }
         });
