@@ -100,7 +100,7 @@ while($task = mysqli_fetch_assoc($getcategories)) {
 </div>
 <div class="checkbox">    
 <label>
-<input type="checkbox" id="has_due" name="has_due"> Due date required
+<input type="checkbox" id="has_due" name="has_due"> <span id="has_due_message">Due date required</span>
 </label>
 </div>
 <div class="form-group">
@@ -159,10 +159,20 @@ $(document).ready(function() {
     $("#addform").validator({
         disable: true
     });
+    $("#addform").on("validate.bs.validator", function (e) {
+        if ($("#due").parent().hasClass("has-error")) {
+            $("#has_due_message").addClass("text-danger");    
+        } else {
+            $("#has_due_message").removeClass("text-danger");
+        }        
+    });
+    $("#addform").on("valid.bs.validator", function (e) {
+        $("#due").parent().removeClass("has-error"); 
+    });
     $("#addform").validator().on("submit", function (e) {
         if (e.isDefaultPrevented()) {
             return false;
-        } 
+        }
         $.ajax({
             type: "POST",
             url: "worker.php",
