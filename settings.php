@@ -97,11 +97,12 @@ mysqli_close($con);
 <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-save" title="Update" aria-hidden="true"></span> Update</button>
 </form>
 <hr>
-<h2>API key</h2>
+<h2>API Key</h2>
 <p>Your API key is: <b><span id="api_key"><?php echo $resultgetusersettings["api_key"]; ?></span></b></p>
 <button id="generateapikey" class="btn btn-default"><span class="glyphicon glyphicon-lock" title="Generate New Key" aria-hidden="true"></span> Generate New Key</button>
+<hr>
 <h2>Version</h2>
-<span id="update"><p>Your have Chore version <?php echo $version; ?></p></span>
+<span id="update"><p>You have Chore version <?php echo $version; ?></p></span>
 <button id="checkforupdates" class="btn btn-default"><span class="glyphicon glyphicon-refresh" title="Check For Update" aria-hidden="true"></span> Check For Update</button>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
