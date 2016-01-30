@@ -106,15 +106,15 @@ if (isset($_POST["email"])) {
 <img class="logo-img" src="assets/icon.png" alt="Chore">
 <?php 
 if (isset($_GET["email_error"])) {
-    echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>Email does not exist.</div>";
+    echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> Email does not exist.</div>";
 } elseif (isset($_GET["sent_reset_confirm"])) {
-    echo "<div class=\"alert alert-success\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>A reset link has been sent to your email.</div>";
+    echo "<div class=\"alert alert-success\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-envelope\" aria-hidden=\"true\"></span> A reset link has been sent to your email.</div>";
 } elseif (isset($_GET["sent_pass_confirm"])) {
-    echo "<div class=\"alert alert-success\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>A new password has been sent to your email.</div>";
+    echo "<div class=\"alert alert-success\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-envelope\" aria-hidden=\"true\"></span> A new password has been sent to your email.</div>";
 } elseif (isset($_GET["send_fail"])) {
-    echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>Message could not be sent.</div>";
+    echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> Message could not be sent.</div>";
 } elseif (isset($_GET["hash_error"])) {
-    echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>Hash error. Link may have already been used.</div>";
+    echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> Hash error. Link may have already been used.</div>";
 } 
 ?>
 <label for="email" class="sr-only">Email</label>
