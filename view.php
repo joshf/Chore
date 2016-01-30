@@ -95,10 +95,10 @@ if (mysqli_num_rows($getitems) != 0) {
               
         if ($item["has_due"] != "1") {
             $rawdue = "";
+        } else {
+            echo "<p><span class=\"glyphicon glyphicon-calendar\" title=\"Due\" aria-hidden=\"true\"></span> <span id=\"due\">" . $rawdue . "</span> ";
         }
         
-        echo "<p><span class=\"glyphicon glyphicon-calendar\" title=\"Due\" aria-hidden=\"true\"></span> <span id=\"due\">" . $rawdue . "</span> ";
-          
         if ($item["has_due"] == "1") {
             
             if ($today > $due) {
