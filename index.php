@@ -166,7 +166,7 @@ if (mysqli_num_rows($getitems) != 0) {
         if ($item["category"] != "") {
             echo "<span class=\"hidden-xs badge badge-blue\">" . $item["category"] . "</span> ";
         }
-        echo "<span class=\"complete glyphicon glyphicon-ok\" data-id=\"" . $item["id"] . "\"></span></div></li>";
+        echo "<span class=\"complete glyphicon glyphicon-ok\" title=\"Complete\" data-id=\"" . $item["id"] . "\"></span></div></li>";
     }
 } else {
     echo "<li class=\"list-group-item\">No items to show</li>";
