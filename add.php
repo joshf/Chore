@@ -168,6 +168,7 @@ $(document).ready(function() {
     });
     $("#addform").on("valid.bs.validator", function (e) {
         $("#due").parent().removeClass("has-error"); 
+        $("#has_due_message").removeClass("text-danger");
     });
     $("#addform").validator().on("submit", function (e) {
         if (e.isDefaultPrevented()) {
