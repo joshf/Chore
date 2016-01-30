@@ -79,7 +79,7 @@ if (!isset($_SESSION["chore_user"])) {
 if (isset($_GET["login_error"])) {
     echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> Incorrect login.</div>";
 } elseif (isset($_GET["logged_out"])) {
-    echo "<div class=\"alert alert-success\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-log-out\" aria-hidden=\"true\"></span> Successfully logged out.</div>";
+    echo "<div class=\"alert alert-success\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> Successfully logged out.</div>";
 }
 ?>
 <label for="username" class="sr-only">Username</label>
