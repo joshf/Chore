@@ -69,7 +69,7 @@ $resultitemcheck = mysqli_fetch_assoc($itemcheck);
 </ol>
 <?php
 
-$getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `id` = \"$itemid\"");
+$getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.id, items.highpriority, items.item, items.details, items.created, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.id = \"$itemid\"");
 
 if (mysqli_num_rows($getitems) != 0) {
     while($item = mysqli_fetch_assoc($getitems)) {
@@ -83,7 +83,7 @@ if (mysqli_num_rows($getitems) != 0) {
     
         echo "<p><span class=\"glyphicon glyphicon-zoom-in\" title=\"Details\" aria-hidden=\"true\"></span> <span id=\"details\">" . $item["details"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-info-sign\" title=\"Created\" aria-hidden=\"true\"></span> <span id=\"created\">" . $item["created"] . "</span></p>";
-        echo "<p><span class=\"glyphicon glyphicon-tags\" title=\"Category\" aria-hidden=\"true\"></span> <span id=\"category\">" . $item["category"] . "</span></p>";
+        echo "<p><span class=\"glyphicon glyphicon-tags\" title=\"Category\" aria-hidden=\"true\"></span> <span id=\"category\" data-id=\"" . $item["id"] . "\">" . $item["category"] . "</span></p>";
        
  
         $today = strtotime(date("Y-m-d"));
@@ -200,7 +200,7 @@ $(document).ready(function() {
     });   
     $("#category").editable({
         type: "select",
-        value: $("#category").html(),
+        value: $("#category").data("id"),
         pk: 4,
         source: "worker.php?action=listcats",
         title: "Category",

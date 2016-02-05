@@ -66,28 +66,28 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 </div>
 <div class="hidden" id="newcategory_holder">
 <div class="form-group">
-<label class="control-label" for="newcategory">Category</label>
-<input type="text" class="form-control" id="newcategory" name="newcategory" placeholder="Type a new category..." required>
+<label class="control-label" for="new_category">Category</label>
+<input type="text" class="form-control" id="new_category" name="new_category" placeholder="Type a new category..." required disabled>
 </div>
 </div>
 <div id="category_holder">
 <div class="form-group">
-<label class="control-label" for="category">Category</label>
+<label class="control-label" for="category_id">Category</label>
 <div class="input-group">
-<select class="form-control" id="category" name="category">
+<select class="form-control" id="category_id" name="category_id">
 <?php
 
 //Don"t duplicate none entry
-$doesnoneexist = mysqli_query($con, "SELECT `category` FROM `items` WHERE `category` = \"none\"");
+$doesnoneexist = mysqli_query($con, "SELECT `category` FROM `categories` WHERE `category` = \"none\"");
 if (mysqli_num_rows($doesnoneexist) == 0) {
     echo "<option value=\"\">None</option>";
 }
 
 //Get categories
-$getcategories = mysqli_query($con, "SELECT DISTINCT(category) FROM `items` WHERE `category` != \"\"");
+$getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
 
 while($task = mysqli_fetch_assoc($getcategories)) {
-        echo "<option value=\"" . $task["category"] . "\">" . ucfirst($task["category"]) . "</option>";
+        echo "<option value=\"" . $task["id"] . "\">" . ucfirst($task["category"]) . "</option>";
 }
 
 ?>
@@ -132,19 +132,37 @@ $(document).ready(function() {
             $("#due").prop("required", false);
         }
     });
-    $("#newcategory").on("keydown", function(e) {
+    $("#new_category").on("keydown", function(e) {
         if (e.which == 13) {
-            var newcategory = $("#newcategory").val();
-            if (newcategory !== null && newcategory != "") {                                             
-                $("#category").append("<option value=\"" + newcategory + "\" selected=\"selected\">" + newcategory + "</option>");
-                $("#newcategory_holder").addClass("hidden");
-                $("#category_holder").removeClass("hidden");                
+            var new_category = $("#new_category").val();
+            if (new_category !== null && new_category != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "worker.php",
+                    data: "action=addcategory&new_category="+ new_category +"",
+                    error: function() {
+                        $.notify({
+                            message: "Ajax query failed!",
+                            icon: "glyphicon glyphicon-warning-sign",
+                        },{
+                            type: "danger",
+                            allow_dismiss: true
+                        });
+                    },
+                    success: function(id) {
+                        $("#new_category").prop("disabled", true);
+                        $("#category_id").append("<option value=\"" + id + "\" selected=\"selected\">" + new_category + "</option>");
+                        $("#newcategory_holder").addClass("hidden");
+                        $("#category_holder").removeClass("hidden");             
+                    }
+                });                                            
             }
             event.preventDefault();
         }
     });
     $("#addcategory").click(function() {
         $("#newcategory_holder").removeClass("hidden");
+        $("#new_category").prop("disabled", false);
         $("#newcategory").focus();
         $("#category_holder").addClass("hidden");
         
@@ -174,10 +192,12 @@ $(document).ready(function() {
         if (e.isDefaultPrevented()) {
             return false;
         }
+        d = $("#addform").serialize();
+        alert(d)
         $.ajax({
             type: "POST",
             url: "worker.php",
-            data: $("#addform").serialize(),
+            data: d,
             error: function() {
                 $.notify({
                     message: "Ajax query failed!",

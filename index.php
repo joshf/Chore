@@ -40,11 +40,11 @@ if (isset($_GET["filter"])) {
     //Make sure cat exists
 	if ($filter == "categories") {
 		if (isset($_GET["cat"])) {
-		    $cat = mysqli_real_escape_string($con, $_GET["cat"]);
-            if ($cat == "none") {
-                $cat = "";
+		    $cat_id = mysqli_real_escape_string($con, $_GET["cat"]);
+            if ($cat_id == "none") {
+                $cat_id = "";
             } else {
-    		    $checkcatexists = mysqli_query($con, "SELECT `category` FROM `items` WHERE `category` = \"$cat\"");
+    		    $checkcatexists = mysqli_query($con, "SELECT `id`, `category` FROM `categories` WHERE `id` = \"$cat_id\"");
     		    if (mysqli_num_rows($checkcatexists) == 0) {
     		        $filter = "normal";                
     		    }
@@ -101,10 +101,10 @@ if (isset($_GET["filter"])) {
 <?php
 
 //Get categories
-$getcategories = mysqli_query($con, "SELECT DISTINCT(category) FROM `items` WHERE `category` != \"\" AND `completed` = \"0\"");
+$getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
 
 while($task = mysqli_fetch_assoc($getcategories)) {
-        echo "<option value=\"index.php?filter=categories&amp;cat=" . $task["category"] . "\">" . ucfirst($task["category"]) . "</option>";
+        echo "<option value=\"index.php?filter=categories&amp;cat=" . $task["id"] . "\">" . ucfirst($task["category"]) . "</option>";
 }
 
 ?>
@@ -121,21 +121,21 @@ while($task = mysqli_fetch_assoc($getcategories)) {
 <?php
 
 if ($filter == "completed") {
-    $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"1\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.highpriority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\"");
 } elseif ($filter == "highpriority") {
-    $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `highpriority` = \"1\" AND `completed` = \"0\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.highpriority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.highpriority = \"1\" AND items.completed = \"0\"");
 } elseif ($filter == "categories") {
-	$getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `category` = \"$cat\"");
+	$getitems = mysqli_query($con, "SELECT items.id, categories.category, items.highpriority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND categories.id = \"$cat_id\"");
 } elseif ($filter == "date") {
-	$getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `has_due` = \"1\" ORDER BY `due` ASC");
+	$getitems = mysqli_query($con, "SELECT items.id, categories.category, items.highpriority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.has_due = \"1\" ORDER BY items.due ASC");
 } elseif ($filter == "duetoday") {
-    $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `due` = CURDATE() AND `has_due` = \"1\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.highpriority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.due = CURDATE() AND items.has_due = \"1\"");
 } elseif ($filter == "overdue") {
-    $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" AND `due` < CURDATE() AND `has_due` = \"1\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.highpriority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.due < CURDATE() AND items.has_due = \"1\"");
 } elseif ($filter == "created") {
-	$getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\" ORDER BY `created` ASC");
+	$getitems = mysqli_query($con, "SELECT items.id, categories.category, items.highpriority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" ORDER BY items.created ASC");
 } else {
-    $getitems = mysqli_query($con, "SELECT * FROM `items` WHERE `completed` = \"0\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.highpriority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\"");
 } 
 
 if (mysqli_num_rows($getitems) != 0) {

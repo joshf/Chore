@@ -55,7 +55,7 @@ if (isset($_POST["action"])) {
 }
 
 //Check if ID exists
-$actions = array("complete", "restore", "delete", "info", "edit", "duein", "togglehighpriority");
+$actions = array("complete", "restore", "delete", "info", "edit", "duein", "deletecategory");
 if (in_array($action, $actions)) {
     if (isset($_POST["id"]) || isset($_GET["id"])) {
         if (isset($_POST["action"])) {
@@ -63,8 +63,12 @@ if (in_array($action, $actions)) {
         } elseif (isset($_GET["action"])) {
             $id = mysqli_real_escape_string($con, $_GET["id"]);
         }
-                
-        $checkid = mysqli_query($con, "SELECT `id` FROM `items` WHERE `id` = $id");
+        
+        if ($action == "deletecategory") {       
+            $checkid = mysqli_query($con, "SELECT `id` FROM `categories` WHERE `id` = $id");
+        } else {
+            $checkid = mysqli_query($con, "SELECT `id` FROM `items` WHERE `id` = $id");
+        }
                
         if (mysqli_num_rows($checkid) == 0) {
         	die("Error: ID does not exist!");
@@ -85,10 +89,15 @@ if (isset($_POST["details"])) {
 } elseif (isset($_GET["details"])) {
     $details = mysqli_real_escape_string($con, $_GET["details"]);
 }
-if (isset($_POST["category"])) {
-    $category = mysqli_real_escape_string($con, $_POST["category"]);
-} elseif (isset($_GET["category"])) {
-    $category = mysqli_real_escape_string($con, $_GET["category"]);
+if (isset($_POST["category_id"])) {
+    $category_id = mysqli_real_escape_string($con, $_POST["category_id"]);
+} elseif (isset($_GET["category_id"])) {
+    $category_id = mysqli_real_escape_string($con, $_GET["category_id"]);
+}
+if (isset($_POST["new_category"])) {
+    $new_category = mysqli_real_escape_string($con, $_POST["new_category"]);
+} elseif (isset($_GET["new_category"])) {
+    $new_category = mysqli_real_escape_string($con, $_GET["new_category"]);
 }
 if (isset($_POST["due"])) {
     $due = mysqli_real_escape_string($con, $_POST["due"]);
@@ -128,11 +137,23 @@ if ($action == "add") {
         $due = "$year-$month-$day";
     }
     
-    mysqli_query($con, "INSERT INTO `items` (`category`, `highpriority`, `item`, `details`, `has_due`, `created`, `due`, `completed`, `datecompleted`)
-    VALUES (\"$category\",\"$highpriority\",\"$item\",\"$details\",\"$has_due\",CURDATE(),\"$due\",\"0\",\"\")");
+    mysqli_query($con, "INSERT INTO `items` (`category_id`, `highpriority`, `item`, `details`, `has_due`, `created`, `due`, `completed`, `datecompleted`)
+    VALUES (\"$category_id\",\"$highpriority\",\"$item\",\"$details\",\"$has_due\",CURDATE(),\"$due\",\"0\",\"\")");
     
     echo "Info: Item added!";
     
+} elseif ($action == "addcategory") {
+    
+    if (empty($new_category)) {
+        die("Error: Data was empty!");
+    }
+
+    mysqli_query($con, "INSERT INTO `categories` (`category`)
+    VALUES (\"$new_category\")");
+        
+    echo mysqli_insert_id($con);
+
+        
 } elseif ($action == "edit") {
     
     if (isset($_POST["value"])) {
@@ -146,7 +167,7 @@ if ($action == "add") {
     if ($pk == "1") {
         mysqli_query($con, "UPDATE `items` SET `item` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "2") {
-        mysqli_query($con, "UPDATE `items` SET `details` = \"$value\" WHERE `id` = \"$id\"");
+        mysqli_query($con, "UPDATE `items` SET `details` = \"$value\" WHERE `id` = \"$id\"") or die(mysqli_query($con));
     } elseif ($pk == "3") {
         
         $datecheck = "/\d{1,2}\-\d{1,2}\-\d{4}/";
@@ -160,7 +181,7 @@ if ($action == "add") {
         
         mysqli_query($con, "UPDATE `items` SET `has_due` = \"1\", `due` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "4") {
-        mysqli_query($con, "UPDATE `items` SET `category` = \"$value\" WHERE `id` = \"$id\"");
+        mysqli_query($con, "UPDATE `items` SET `category_id` = \"$value\" WHERE `id` = \"$id\"");
     } else {
         die("Error: Unknown key!");
     }
@@ -169,12 +190,12 @@ if ($action == "add") {
 
 } elseif ($action == "listcats") {
     
-    $getcats = mysqli_query($con, "SELECT DISTINCT(category) FROM `items` WHERE `category` != \"\"");
+    $getcats = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
     
     while($cat = mysqli_fetch_assoc($getcats)) {    
         $cats[] = array(
-            "text" => $cat["category"],
-            "value" => $cat["category"]
+            "value" => $cat["id"],
+            "text" => $cat["category"]
         );    
     }
 
@@ -196,14 +217,17 @@ if ($action == "add") {
     mysqli_query($con, "DELETE FROM `items` WHERE `id` = \"$id\"");
     
     echo "Info: Item deleted!";
+} elseif ($action == "deletecategory") {
+    mysqli_query($con, "DELETE FROM `categories` WHERE `id` = \"$id\"");
     
+    echo "Info: Category deleted!";   
 } elseif ($action == "info") {
-    $getitems = mysqli_query($con, "SELECT `id`, `category`, `highpriority`, `item`, `details`, `created`, `has_due`, `due`, `completed`, `datecompleted` FROM `items` WHERE `id` = \"$id\"");
+    $getitems = mysqli_query($con, "SELECT `id`, `category_id`, `highpriority`, `item`, `details`, `created`, `has_due`, `due`, `completed`, `datecompleted` FROM `items` WHERE `id` = \"$id\"");
     
     while($item = mysqli_fetch_assoc($getitems)) {
         $items[] = array(
             "id" => $item["id"],
-            "category" => $item["category"],
+            "category_id" => $item["category_id"],
             "highpriority" => $item["highpriority"],
             "item" => $item["item"],
             "details" => $item["details"],

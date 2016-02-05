@@ -53,8 +53,6 @@ if (!empty($_POST)) {
     exit;
 }
 
-mysqli_close($con);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,6 +102,26 @@ mysqli_close($con);
 <h2>Version</h2>
 <span id="update"><p>You have Chore version <?php echo $version; ?></p></span>
 <button id="checkforupdates" class="btn btn-default"><span class="glyphicon glyphicon-refresh" title="Check For Update" aria-hidden="true"></span> Check For Update</button>
+<hr>
+<h2>Categories</h2>
+<ul id="categories" class="list-group">
+<?php
+
+$getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
+
+while($category = mysqli_fetch_assoc($getcategories)) {
+    echo "<li class=\"list-group-item\">" . $category["category"] . " <span class=\"pull-right delete glyphicon glyphicon-remove\" data-id=\"" . $category["id"] . "\"></span></li>";
+}
+
+mysqli_close($con);
+    
+?>
+</ul>
+<div class="form-group">
+<label class="control-label" for="newcategory">Category</label>
+<input type="text" class="form-control" id="new_category" name="new_category" placeholder="Type a new category..." required>
+</div>
+<button id="addcategory" class="btn btn-default"><span class="glyphicon glyphicon-plus" title="Add Category" aria-hidden="true"></span> Add Category</button>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
@@ -153,6 +171,64 @@ $(document).ready(function() {
                 $("#update").html("<p>No update available</p>")
             }
         });
+    });
+    $("li").on("click", ".delete", function() {
+        var id = $(this).data("id");
+        var element = $(this).parent();
+            $.ajax({
+                type: "POST",
+                url: "worker.php",
+                data: "action=deletecategory&id="+ id +"",
+                error: function() {
+                    $.notify({
+                        message: "Ajax query failed!",
+                        icon: "glyphicon glyphicon-warning-sign",
+                    },{
+                        type: "danger",
+                        allow_dismiss: true
+                    });
+                },
+                success: function() {
+                    $.notify({
+                        message: "Category deleted!",
+                        icon: "glyphicon glyphicon-ok",
+                    },{
+                        type: "success",
+                        allow_dismiss: true
+                    });
+                    $(element).remove();
+                }
+        });
+    }); 
+    $("#addcategory").click(function() {
+        var new_category = $("#new_category").val();
+        if (new_category !== null && new_category != "") {                                                         
+            $.ajax({
+                type: "POST",
+                url: "worker.php",
+                data: "action=addcategory&new_category=" + new_category + "",
+                error: function() {
+                    $.notify({
+                        message: "Ajax Error!",
+                        icon: "glyphicon glyphicon-exclamation-sign",
+                    },{
+                        type: "danger",
+                        allow_dismiss: true
+                    });
+                },
+                success: function() {
+                    $.notify({
+                        message: "Category added!",
+                        icon: "glyphicon glyphicon-ok",
+                    },{
+                        type: "success",
+                        allow_dismiss: true
+                    });
+                    $("#newcategory").val("");
+                    $("#categories").append("<li class=\"list-group-item\">" + new_category + "</li>")
+                }
+            });               
+        }   
     });
     $("#add").click(function() {
     	window.location.href = "add.php";
