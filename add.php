@@ -108,7 +108,7 @@ while($category = mysqli_fetch_assoc($getcategories)) {
 </div>
 <div class="checkbox">
 <label>
-<input type="checkbox" id="high_priority" name="high_priority"> High Priority
+<input type="checkbox" id="priority" name="priority"> High Priority
 </label>
 </div>
 <input type="hidden" id="action" name="action" value="add">

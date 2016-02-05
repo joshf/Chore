@@ -16,8 +16,8 @@ if (mysqli_connect_errno()) {
     die("Error: Could not connect to database (" . mysqli_connect_error() . "). Check your database settings are correct.");
 }
 
-if (isset($_COOKIE["chore_user_rememberme"])) {
-    $hash = $_COOKIE["chore_user_rememberme"];
+if (isset($_COOKIE["chore_user_remember_me"])) {
+    $hash = $_COOKIE["chore_user_remember_me"];
     $getuser = mysqli_query($con, "SELECT `id`, `hash` FROM `users` WHERE `hash` = \"$hash\"");
     if (mysqli_num_rows($getuser) == 0) {
         header("Location: logout.php");
@@ -40,10 +40,10 @@ if (isset($_POST["password"]) && isset($_POST["username"])) {
     $hashedpassword = hash("sha256", $salt . hash("sha256", $password));
     if ($hashedpassword == $userinforesult["password"]) {
         $_SESSION["chore_user"] = $userinforesult["id"];
-        if (isset($_POST["rememberme"])) {
+        if (isset($_POST["remember_me"])) {
             $hash = substr(str_shuffle(MD5(microtime())), 0, 50);
             mysqli_query($con, "UPDATE `users` SET `hash` = \"$hash\" WHERE `id` = \"" . $userinforesult["id"] . "\"");
-            setcookie("chore_user_rememberme", $hash, time()+3600*24*7);
+            setcookie("chore_user_remember_me", $hash, time()+3600*24*7);
         }
     } else {
         header("Location: login.php?login_error=true");
@@ -88,7 +88,7 @@ if (isset($_GET["login_error"])) {
 <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
 <div class="checkbox">
 <label>
-<input type="checkbox" value="remember-me"> Remember Me
+<input type="checkbox" value="remember_me"> Remember Me
 </label>
 <a class="pull-right btn btn-default btn-xs" href="reset.php">Reset</a>
 </div>
