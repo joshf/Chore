@@ -62,7 +62,7 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 </div>
 <div class="form-group">
 <label class="control-label" for="details">Details</label>
-<textarea class="form-control" id="details" name="details" placeholder="Type any extra details..." required></textarea>
+<textarea class="form-control" id="details" name="details" placeholder="Type any extra details..."></textarea>
 </div>
 <div class="hidden" id="newcategory_holder">
 <div class="form-group">
