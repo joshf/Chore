@@ -46,7 +46,7 @@ if (isset($_POST["install"])) {
     `has_due` tinyint(1) NOT NULL DEFAULT \"0\",
     `due` date NOT NULL,
     `completed` tinyint(1) NOT NULL DEFAULT \"0\",
-    `date_completed` date NOT NULL
+    `date_completed` date NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB;";
     
@@ -69,7 +69,7 @@ if (isset($_POST["install"])) {
     //Create categories table
     $createcategoriestable = "CREATE TABLE `categories` (
     `id` int(8) NOT NULL,
-    `category` varchar(30) NOT NULL
+    `category` varchar(30) NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB;";
     
