@@ -59,7 +59,7 @@ if (!empty($_POST)) {
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <link rel="icon" href="assets/favicon.ico">
 <title>Chore &raquo; Settings</title>
 <link rel="apple-touch-icon" href="assets/icon.png">
@@ -95,14 +95,6 @@ if (!empty($_POST)) {
 <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-save" title="Update" aria-hidden="true"></span> Update</button>
 </form>
 <hr>
-<h2>API Key</h2>
-<p>Your API key is: <b><span id="api_key"><?php echo $resultgetusersettings["api_key"]; ?></span></b></p>
-<button id="generateapikey" class="btn btn-default"><span class="glyphicon glyphicon-lock" title="Generate New Key" aria-hidden="true"></span> Generate New Key</button>
-<hr>
-<h2>Version</h2>
-<span id="update"><p>You have Chore version <?php echo $version; ?></p></span>
-<button id="checkforupdates" class="btn btn-default"><span class="glyphicon glyphicon-refresh" title="Check For Update" aria-hidden="true"></span> Check For Update</button>
-<hr>
 <h2>Categories</h2>
 <ul id="categories" class="list-group">
 <?php
@@ -122,6 +114,14 @@ mysqli_close($con);
 <input type="text" class="form-control" id="new_category" name="new_category" placeholder="Type a new category..." required>
 </div>
 <button id="add_category" class="btn btn-default"><span class="glyphicon glyphicon-plus" title="Add Category" aria-hidden="true"></span> Add Category</button>
+<br>
+<h2>API Key</h2>
+<p>Your API key is: <b><span id="api_key"><?php echo $resultgetusersettings["api_key"]; ?></span></b></p>
+<button id="generate_api_key" class="btn btn-default"><span class="glyphicon glyphicon-lock" title="Generate New Key" aria-hidden="true"></span> Generate New Key</button>
+<hr>
+<h2>Version</h2>
+<span id="update"><p>You have Chore version <?php echo $version; ?></p></span>
+<button id="check_for_updates" class="btn btn-default"><span class="glyphicon glyphicon-refresh" title="Check For Update" aria-hidden="true"></span> Check For Update</button>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
@@ -147,7 +147,7 @@ $(document).ready(function() {
     $("form").submit(function() {
         Cookies.set("chore_settings_updated", "1", { expires: 7 });
     });
-    $("#generateapikey").click(function() {
+    $("#generate_api_key").click(function() {
         $.ajax({
             type: "POST",
             url: "worker.php",
@@ -160,7 +160,7 @@ $(document).ready(function() {
             }
         });
     });
-    $("#checkforupdates").click(function() {
+    $("#check_for_updates").click(function() {
         $.getJSON("https://api.github.com/repos/joshf/Chore/releases").done(function(resp) {
             var data = resp[0];
             var chore_remote_version = data.tag_name;
@@ -224,7 +224,7 @@ $(document).ready(function() {
                         type: "success",
                         allow_dismiss: true
                     });
-                    $("#new_category").empty();
+                    $("#new_category").val("");
                     $("#categories").append("<li class=\"list-group-item\">" + new_category + "</li>")
                 }
             });               

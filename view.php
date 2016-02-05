@@ -69,7 +69,7 @@ $resultitemcheck = mysqli_fetch_assoc($itemcheck);
 </ol>
 <?php
 
-$getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.id, items.priority, items.item, items.details, items.created, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.id = \"$item_id\"");
+$getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.id, items.priority, items.item, items.details, items.created, items.has_due, items.due, items.completed FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.id = \"$item_id\"");
 
 if (mysqli_num_rows($getitems) != 0) {
     while($item = mysqli_fetch_assoc($getitems)) {
@@ -182,7 +182,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "worker.php",
-            data: "action=due_in&id="+ id +"",
+            data: "action=duein&id="+ id +"",
             error: function() {
                 console.log("Error: could not connect to worker!");
             },

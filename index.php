@@ -103,13 +103,13 @@ if (isset($_GET["filter"])) {
 //Get categories
 $getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
 
-while($task = mysqli_fetch_assoc($getcategories)) {
-        echo "<option value=\"index.php?filter=categories&amp;cat=" . $task["id"] . "\">" . ucfirst($task["category"]) . "</option>";
+while($category = mysqli_fetch_assoc($getcategories)) {
+        echo "<option value=\"index.php?filter=categories&amp;cat=" . $category["id"] . "\">" . ucfirst($category["category"]) . "</option>";
 }
 
 ?>
 </optgroup>
-<optgroup label="Sort">
+<optgroup label="Sort By">
 <option value="index.php?filter=date">Due Date</option>
 <option value="index.php?filter=created">Created Date</option>
 </optgroup>
@@ -146,15 +146,13 @@ if (mysqli_num_rows($getitems) != 0) {
         $due = strtotime($item["due"]);
         
         echo "<li class=\"list-group-item\"><span class=\"list\" data-id=\"" . $item["id"] . "\">";
-        
-  
-            if ($item["priority"] == "1") {
-               echo "<b>" . $item["item"] . "</b>"; 
-            } else {
-                echo "" . $item["item"] . ""; 
-            }
-        
-        
+    
+        if ($item["priority"] == "1") {
+           echo "<b>" . $item["item"] . "</b>"; 
+        } else {
+            echo "" . $item["item"] . ""; 
+        }
+            
         echo "</span><div class=\"pull-right\">";
         if ($item["has_due"] == "1") {
             if ($today >= $due) {

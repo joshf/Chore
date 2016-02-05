@@ -167,7 +167,7 @@ if ($action == "add") {
     if ($pk == "1") {
         mysqli_query($con, "UPDATE `items` SET `item` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "2") {
-        mysqli_query($con, "UPDATE `items` SET `details` = \"$value\" WHERE `id` = \"$id\"") or die(mysqli_query($con));
+        mysqli_query($con, "UPDATE `items` SET `details` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "3") {
         
         $datecheck = "/\d{1,2}\-\d{1,2}\-\d{4}/";

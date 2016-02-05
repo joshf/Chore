@@ -34,7 +34,7 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <link rel="icon" href="assets/favicon.ico">
 <title>Chore &raquo; Add</title>
 <link rel="apple-touch-icon" href="assets/icon.png">
@@ -164,8 +164,7 @@ $(document).ready(function() {
         $("#new_category_holder").removeClass("hidden");
         $("#new_category").prop("disabled", false);
         $("#new_category").focus();
-        $("#category_holder").addClass("hidden");
-        
+        $("#category_holder").addClass("hidden");   
     });
     if (!Modernizr.inputtypes.date) {
         $(".due").datepicker({
