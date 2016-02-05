@@ -38,7 +38,7 @@ if (!isset($_SESSION["chore_user"])) {
     exit;
 }
 
-$getusersettings = mysqli_query($con, "SELECT `user` FROM `users` WHERE `id` = \"" . $_SESSION["chore_user"] . "\"");
+$getusersettings = mysqli_query($con, "SELECT `id`, `user` FROM `users` WHERE `id` = \"" . $_SESSION["chore_user"] . "\"");
 if (mysqli_num_rows($getusersettings) == 0) {
     session_destroy();
     header("Location: login.php");
@@ -89,10 +89,10 @@ if (isset($_POST["details"])) {
 } elseif (isset($_GET["details"])) {
     $details = mysqli_real_escape_string($con, $_GET["details"]);
 }
-if (isset($_POST["category_id"])) {
-    $category_id = mysqli_real_escape_string($con, $_POST["category_id"]);
-} elseif (isset($_GET["category_id"])) {
-    $category_id = mysqli_real_escape_string($con, $_GET["category_id"]);
+if (isset($_POST["category"])) {
+    $category = mysqli_real_escape_string($con, $_POST["category"]);
+} elseif (isset($_GET["category"])) {
+    $category = mysqli_real_escape_string($con, $_GET["category"]);
 }
 if (isset($_POST["new_category"])) {
     $new_category = mysqli_real_escape_string($con, $_POST["new_category"]);
@@ -116,10 +116,10 @@ if ($action == "add") {
         die("Error: Data was empty!");
     }
 
-    if (isset($_POST["highpriority"])) {
-        $highpriority = "1";
+    if (isset($_POST["priority"])) {
+        $priority = "1";
     } else {
-        $highpriority = "0";
+        $priority = "0";
     }
     
     if (empty($due)) {
@@ -127,7 +127,7 @@ if ($action == "add") {
     } else {
         $has_due = "1";
     }
-    
+        
     $datecheck = "/\d{1,2}\-\d{1,2}\-\d{4}/";
     if (preg_match($datecheck, $due)) {
         $segments = explode("-", $due);
@@ -137,8 +137,8 @@ if ($action == "add") {
         $due = "$year-$month-$day";
     }
     
-    mysqli_query($con, "INSERT INTO `items` (`category_id`, `highpriority`, `item`, `details`, `has_due`, `created`, `due`, `completed`, `datecompleted`)
-    VALUES (\"$category_id\",\"$highpriority\",\"$item\",\"$details\",\"$has_due\",CURDATE(),\"$due\",\"0\",\"\")");
+    mysqli_query($con, "INSERT INTO `items` (`category_id`, `priority`, `item`, `details`, `has_due`, `created`, `due`, `completed`, `date_completed`)
+    VALUES (\"$category\",\"$priority\",\"$item\",\"$details\",\"$has_due\",CURDATE(),\"$due\",\"0\",\"\")");
     
     echo "Info: Item added!";
     
@@ -204,7 +204,7 @@ if ($action == "add") {
     echo json_encode($cats);
 
 } elseif ($action == "complete") {
-    mysqli_query($con, "UPDATE `items` SET `completed` = \"1\", `datecompleted` = CURDATE() WHERE `id` = \"$id\"");
+    mysqli_query($con, "UPDATE `items` SET `completed` = \"1\", `date_completed` = CURDATE() WHERE `id` = \"$id\"");
     
     echo "Info: Item marked as completed!";
     
@@ -222,20 +222,20 @@ if ($action == "add") {
     
     echo "Info: Category deleted!";   
 } elseif ($action == "info") {
-    $getitems = mysqli_query($con, "SELECT `id`, `category_id`, `highpriority`, `item`, `details`, `created`, `has_due`, `due`, `completed`, `datecompleted` FROM `items` WHERE `id` = \"$id\"");
+    $getitems = mysqli_query($con, "SELECT `id`, `category_id`, `priority`, `item`, `details`, `created`, `has_due`, `due`, `completed`, `date_completed` FROM `items` WHERE `id` = \"$id\"");
     
     while($item = mysqli_fetch_assoc($getitems)) {
         $items[] = array(
             "id" => $item["id"],
             "category_id" => $item["category_id"],
-            "highpriority" => $item["highpriority"],
+            "priority" => $item["priority"],
             "item" => $item["item"],
             "details" => $item["details"],
             "created" => $item["created"],
             "has_due" => $item["has_due"],
             "due" => $item["due"],
             "completed" => $item["completed"],
-            "datecompleted" => $item["datecompleted"]
+            "date_completed" => $item["date_completed"]
         );
     }
     

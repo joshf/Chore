@@ -55,7 +55,7 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 <li class="active">Add</li>
 <li class="pull-right"><span id="add" title="Add" class="glyphicon glyphicon-plus" aria-hidden="true"></span> <span id="settings" title="Settings" class="glyphicon glyphicon-cog" aria-hidden="true"></span> <span id="logout" title="Logout" class="glyphicon glyphicon-log-out" aria-hidden="true"></span></li>
 </ol>
-<form id="addform" autocomplete="off">
+<form id="add_form" autocomplete="off">
 <div class="form-group">
 <label class="control-label" for="item">Item</label>
 <input type="text" class="form-control" id="item" name="item" placeholder="Type a item..." required>
@@ -64,7 +64,7 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 <label class="control-label" for="details">Details</label>
 <textarea class="form-control" id="details" name="details" placeholder="Type any extra details..."></textarea>
 </div>
-<div class="hidden" id="newcategory_holder">
+<div id="new_category_holder" class="hidden">
 <div class="form-group">
 <label class="control-label" for="new_category">Category</label>
 <input type="text" class="form-control" id="new_category" name="new_category" placeholder="Type a new category..." required disabled>
@@ -72,9 +72,9 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 </div>
 <div id="category_holder">
 <div class="form-group">
-<label class="control-label" for="category_id">Category</label>
+<label class="control-label" for="category">Category</label>
 <div class="input-group">
-<select class="form-control" id="category_id" name="category_id">
+<select class="form-control" id="category" name="category">
 <?php
 
 //Don"t duplicate none entry
@@ -86,13 +86,13 @@ if (mysqli_num_rows($doesnoneexist) == 0) {
 //Get categories
 $getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
 
-while($task = mysqli_fetch_assoc($getcategories)) {
-        echo "<option value=\"" . $task["id"] . "\">" . ucfirst($task["category"]) . "</option>";
+while($category = mysqli_fetch_assoc($getcategories)) {
+        echo "<option value=\"" . $category["id"] . "\">" . ucfirst($category["category"]) . "</option>";
 }
 
 ?>
 </select>
-<span id="addcategory" class="input-group-addon">
+<span id="add_category" class="input-group-addon">
 <i class="glyphicon glyphicon-plus"></i>
 </span>
 </div>
@@ -108,7 +108,7 @@ while($task = mysqli_fetch_assoc($getcategories)) {
 </div>
 <div class="checkbox">
 <label>
-<input type="checkbox" id="highpriority" name="highpriority"> High Priority
+<input type="checkbox" id="high_priority" name="high_priority"> High Priority
 </label>
 </div>
 <input type="hidden" id="action" name="action" value="add">
@@ -151,8 +151,8 @@ $(document).ready(function() {
                     },
                     success: function(id) {
                         $("#new_category").prop("disabled", true);
-                        $("#category_id").append("<option value=\"" + id + "\" selected=\"selected\">" + new_category + "</option>");
-                        $("#newcategory_holder").addClass("hidden");
+                        $("#category").append("<option value=\"" + id + "\" selected=\"selected\">" + new_category + "</option>");
+                        $("#new_category_holder").addClass("hidden");
                         $("#category_holder").removeClass("hidden");             
                     }
                 });                                            
@@ -160,10 +160,10 @@ $(document).ready(function() {
             event.preventDefault();
         }
     });
-    $("#addcategory").click(function() {
-        $("#newcategory_holder").removeClass("hidden");
+    $("#add_category").click(function() {
+        $("#new_category_holder").removeClass("hidden");
         $("#new_category").prop("disabled", false);
-        $("#newcategory").focus();
+        $("#new_category").focus();
         $("#category_holder").addClass("hidden");
         
     });
@@ -174,30 +174,28 @@ $(document).ready(function() {
             todayHighlight: "true"
         });
     }
-    $("#addform").validator({
+    $("#add_form").validator({
         disable: true
     });
-    $("#addform").on("validate.bs.validator", function (e) {
+    $("#add_form").on("validate.bs.validator", function (e) {
         if ($("#due").parent().hasClass("has-error")) {
             $("#has_due_message").addClass("text-danger");    
         } else {
             $("#has_due_message").removeClass("text-danger");
         }        
     });
-    $("#addform").on("valid.bs.validator", function (e) {
+    $("#add_form").on("valid.bs.validator", function (e) {
         $("#due").parent().removeClass("has-error"); 
         $("#has_due_message").removeClass("text-danger");
     });
-    $("#addform").validator().on("submit", function (e) {
+    $("#add_form").validator().on("submit", function (e) {
         if (e.isDefaultPrevented()) {
             return false;
         }
-        d = $("#addform").serialize();
-        alert(d)
         $.ajax({
             type: "POST",
             url: "worker.php",
-            data: d,
+            data: $("#add_form").serialize(),
             error: function() {
                 $.notify({
                     message: "Ajax query failed!",
@@ -215,7 +213,7 @@ $(document).ready(function() {
                     type: "success",
                     allow_dismiss: true
                 });
-                $("#addform").trigger("reset");
+                $("#add_form").trigger("reset");
             }
         });
         return false;

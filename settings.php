@@ -121,7 +121,7 @@ mysqli_close($con);
 <label class="control-label" for="newcategory">Category</label>
 <input type="text" class="form-control" id="new_category" name="new_category" placeholder="Type a new category..." required>
 </div>
-<button id="addcategory" class="btn btn-default"><span class="glyphicon glyphicon-plus" title="Add Category" aria-hidden="true"></span> Add Category</button>
+<button id="add_category" class="btn btn-default"><span class="glyphicon glyphicon-plus" title="Add Category" aria-hidden="true"></span> Add Category</button>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
@@ -200,13 +200,13 @@ $(document).ready(function() {
                 }
         });
     }); 
-    $("#addcategory").click(function() {
+    $("#add_category").click(function() {
         var new_category = $("#new_category").val();
         if (new_category !== null && new_category != "") {                                                         
             $.ajax({
                 type: "POST",
                 url: "worker.php",
-                data: "action=addcategory&new_category=" + new_category + "",
+                data: "action=add_category&new_category=" + new_category + "",
                 error: function() {
                     $.notify({
                         message: "Ajax Error!",

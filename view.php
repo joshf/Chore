@@ -29,12 +29,12 @@ if (mysqli_num_rows($getusersettings) == 0) {
 $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 
 if (isset($_GET["item"])) {
-	$itemid = mysqli_real_escape_string($con, $_GET["item"]);	
+	$item_id = mysqli_real_escape_string($con, $_GET["item"]);	
 } else {
 	die("Error: No item passed!");
 }
 
-$itemcheck = mysqli_query($con, "SELECT `id` FROM `items` WHERE `id` = $itemid");
+$itemcheck = mysqli_query($con, "SELECT `id` FROM `items` WHERE `id` = $item_id");
 if ($itemcheck === FALSE || mysqli_num_rows($itemcheck) == "0") {
     die("Error: Item does not exist!");   
 }
@@ -69,14 +69,14 @@ $resultitemcheck = mysqli_fetch_assoc($itemcheck);
 </ol>
 <?php
 
-$getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.id, items.highpriority, items.item, items.details, items.created, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.id = \"$itemid\"");
+$getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.id, items.priority, items.item, items.details, items.created, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.id = \"$item_id\"");
 
 if (mysqli_num_rows($getitems) != 0) {
     while($item = mysqli_fetch_assoc($getitems)) {
         echo "<p><span class=\"glyphicon glyphicon-tasks\" title=\"Item\" aria-hidden=\"true\"></span> <span id=\"item\">" . $item["item"] . "</span>";
         
-        if ($item["highpriority"] == "1") {
-            echo " <span id=\"highpriority\" class=\"text-danger\">(High Priority)</span>";            
+        if ($item["priority"] == "1") {
+            echo " <span id=\"priority\" class=\"text-danger\">(High Priority)</span>";            
         }
         
         echo "</p>";
@@ -90,7 +90,7 @@ if (mysqli_num_rows($getitems) != 0) {
         $rawdue = $item["due"];
         $due = strtotime($item["due"]);
         $datediff = abs($today - $due);
-        $duein = floor($datediff/(60*60*24));
+        $due_in = floor($datediff/(60*60*24));
         
               
         if ($item["has_due"] != "1") {
@@ -102,31 +102,31 @@ if (mysqli_num_rows($getitems) != 0) {
         if ($item["has_due"] == "1") {
             
             if ($today > $due) {
-                if ($duein == "1") {
-                    $string = "Overdue by " . $duein . " day";
+                if ($due_in == "1") {
+                    $string = "Overdue by " . $due_in . " day";
                 } else {
-                    $string = "Overdue by " . $duein . " days";
+                    $string = "Overdue by " . $due_in . " days";
                 }                    
                 $overdue = "true";
             } else {
-                if ($duein == "1") {
-                    $string = "Due in " . $duein . " day";
+                if ($due_in == "1") {
+                    $string = "Due in " . $due_in . " day";
                 } else {
-                    $string = "Due in " . $duein . " days";
+                    $string = "Due in " . $due_in . " days";
                 } 
             }
-            if ($duein == "0") {
+            if ($due_in == "0") {
                 $string = "Due Today";
                 $overdue = "true";
             }                 
             if ($overdue == "true") {
-                echo "<span id=\"duein\" class=\"text-danger\">";
+                echo "<span id=\"due_in\" class=\"text-danger\">";
             } else {
-                echo "<span id=\"duein\">";
+                echo "<span id=\"due_in\">";
             }
             echo "($string)</span></p>";
         } else {
-            echo "<span id=\"duein\">";
+            echo "<span id=\"due_in\">";
         }
         
         echo "<div class=\"btn-group\" role=\"group\">";
@@ -149,7 +149,7 @@ mysqli_close($con);
 <script src="assets/bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">  
 $(document).ready(function() {
-    var id = <?php echo $itemid; ?>;
+    var id = <?php echo $item_id; ?>;
     $.fn.editable.defaults.mode = "popup";    
     $.fn.editable.defaults.placement = "bottom";  
     $.fn.editable.defaults.showbuttons = true;
@@ -182,19 +182,19 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "worker.php",
-            data: "action=duein&id="+ id +"",
+            data: "action=due_in&id="+ id +"",
             error: function() {
                 console.log("Error: could not connect to worker!");
             },
-            success: function(duein) {
-                $("#duein").removeClass("text-danger");
-                if(duein.indexOf("Overdue") != -1){
-                    $("#duein").addClass("text-danger");
+            success: function(due_in) {
+                $("#due_in").removeClass("text-danger");
+                if(due_in.indexOf("Overdue") != -1){
+                    $("#due_in").addClass("text-danger");
                 }
-                if(duein.indexOf("Due Today") != -1){
-                    $("#duein").addClass("text-danger");
+                if(due_in.indexOf("Due Today") != -1){
+                    $("#due_in").addClass("text-danger");
                 }
-                $("#duein").html("(" + duein + ")");
+                $("#due_in").html("(" + due_in + ")");
             }
         });
     });   
