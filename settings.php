@@ -201,6 +201,11 @@ $(document).ready(function() {
                 $(element).remove();
             }
         });
+    });
+    $("#new_category").on("keydown", function(e) {
+        if (e.which == 13) {
+            $("#add_category").click();
+        }
     }); 
     $("#add_category").click(function() {
         var new_category = $("#new_category").val();
