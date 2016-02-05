@@ -66,7 +66,7 @@ $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 </div>
 <div id="new_category_holder" class="hidden">
 <div class="form-group">
-<label class="control-label" for="new_category">Category</label>
+<label class="control-label" for="new_category">New Category</label>
 <input type="text" class="form-control" id="new_category" name="new_category" placeholder="Type a new category..." required disabled>
 </div>
 </div>
@@ -126,7 +126,7 @@ $(document).ready(function() {
     $("#has_due").click(function() {
         if ($(this).is(":checked")) {
             $("#due").prop("disabled", false);
-            $("#due").prop("required", true);            
+            $("#due").prop("required", true);
         } else {
             $("#due").prop("disabled", true);
             $("#due").prop("required", false);
@@ -153,9 +153,9 @@ $(document).ready(function() {
                         $("#new_category").prop("disabled", true);
                         $("#category").append("<option value=\"" + id + "\" selected=\"selected\">" + new_category + "</option>");
                         $("#new_category_holder").addClass("hidden");
-                        $("#category_holder").removeClass("hidden");             
+                        $("#category_holder").removeClass("hidden");
                     }
-                });                                            
+                });
             }
             event.preventDefault();
         }
@@ -164,7 +164,7 @@ $(document).ready(function() {
         $("#new_category_holder").removeClass("hidden");
         $("#new_category").prop("disabled", false);
         $("#new_category").focus();
-        $("#category_holder").addClass("hidden");   
+        $("#category_holder").addClass("hidden");
     });
     if (!Modernizr.inputtypes.date) {
         $(".due").datepicker({
@@ -181,7 +181,7 @@ $(document).ready(function() {
             $("#has_due_message").addClass("text-danger");    
         } else {
             $("#has_due_message").removeClass("text-danger");
-        }        
+        }
     });
     $("#add_form").on("valid.bs.validator", function (e) {
         $("#due").parent().removeClass("has-error"); 

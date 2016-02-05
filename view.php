@@ -79,19 +79,15 @@ if (mysqli_num_rows($getitems) != 0) {
             echo " <span id=\"priority\" class=\"text-danger\">(High Priority)</span>";            
         }
         
-        echo "</p>";
-    
-        echo "<p><span class=\"glyphicon glyphicon-zoom-in\" title=\"Details\" aria-hidden=\"true\"></span> <span id=\"details\">" . $item["details"] . "</span></p>";
+        echo "</p><p><span class=\"glyphicon glyphicon-zoom-in\" title=\"Details\" aria-hidden=\"true\"></span> <span id=\"details\">" . $item["details"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-info-sign\" title=\"Created\" aria-hidden=\"true\"></span> <span id=\"created\">" . $item["created"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-tags\" title=\"Category\" aria-hidden=\"true\"></span> <span id=\"category\" data-id=\"" . $item["id"] . "\">" . $item["category"] . "</span></p>";
        
- 
         $today = strtotime(date("Y-m-d"));
         $rawdue = $item["due"];
         $due = strtotime($item["due"]);
         $datediff = abs($today - $due);
         $due_in = floor($datediff/(60*60*24));
-        
               
         if ($item["has_due"] != "1") {
             $rawdue = "";
@@ -188,10 +184,10 @@ $(document).ready(function() {
             },
             success: function(due_in) {
                 $("#due_in").removeClass("text-danger");
-                if(due_in.indexOf("Overdue") != -1){
+                if(due_in.indexOf("Overdue") != -1) {
                     $("#due_in").addClass("text-danger");
                 }
-                if(due_in.indexOf("Due Today") != -1){
+                if(due_in.indexOf("Due Today") != -1) {
                     $("#due_in").addClass("text-danger");
                 }
                 $("#due_in").html("(" + due_in + ")");
@@ -245,13 +241,13 @@ $(document).ready(function() {
         });
     });
     $("#add").click(function() {
-    	window.location.href = "add.php";
+        window.location.href = "add.php";
     });
     $("#settings").click(function() {
-    	window.location.href = "settings.php";
+        window.location.href = "settings.php";
     });
     $("#logout").click(function() {
-    	window.location.href = "logout.php";
+        window.location.href = "logout.php";
     });
 });
 </script>

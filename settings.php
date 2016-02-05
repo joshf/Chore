@@ -101,16 +101,19 @@ if (!empty($_POST)) {
 
 $getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
 
-while($category = mysqli_fetch_assoc($getcategories)) {
-    echo "<li class=\"list-group-item\">" . $category["category"] . " <span class=\"pull-right delete glyphicon glyphicon-remove\" data-id=\"" . $category["id"] . "\"></span></li>";
+if (mysqli_num_rows($getcategories) != 0) {
+    while($category = mysqli_fetch_assoc($getcategories)) {
+        echo "<li class=\"list-group-item\">" . $category["category"] . " <span class=\"pull-right delete glyphicon glyphicon-remove\" data-id=\"" . $category["id"] . "\"></span></li>";
+    }
+} else {
+    echo "<li class=\"list-group-item\">No categories to show</li>";
 }
-
 mysqli_close($con);
     
 ?>
 </ul>
 <div class="form-group">
-<label class="control-label" for="new_category">Category</label>
+<label class="control-label" for="new_category">New Category</label>
 <input type="text" class="form-control" id="new_category" name="new_category" placeholder="Type a new category..." required>
 </div>
 <button id="add_category" class="btn btn-default"><span class="glyphicon glyphicon-plus" title="Add Category" aria-hidden="true"></span> Add Category</button>
@@ -120,7 +123,7 @@ mysqli_close($con);
 <button id="generate_api_key" class="btn btn-default"><span class="glyphicon glyphicon-lock" title="Generate New Key" aria-hidden="true"></span> Generate New Key</button>
 <hr>
 <h2>Version</h2>
-<span id="update"><p>You have Chore version <?php echo $version; ?></p></span>
+<p><span id="update">You have Chore version <?php echo $version; ?></span></p>
 <button id="check_for_updates" class="btn btn-default"><span class="glyphicon glyphicon-refresh" title="Check For Update" aria-hidden="true"></span> Check For Update</button>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -148,8 +151,7 @@ $(document).ready(function() {
         Cookies.set("chore_settings_updated", "1", { expires: 7 });
     });
     $("#generate_api_key").click(function() {
-        $.ajax({
-            type: "POST",
+        $.ajax({type: "POST",
             url: "worker.php",
             data: "action=generateapikey",
             error: function() {
@@ -166,43 +168,43 @@ $(document).ready(function() {
             var chore_remote_version = data.tag_name;
             var url = data.zipball_url;
             if (chore_version < chore_remote_version) {
-                $("#update").html("<p><a href=\"https://github.com/joshf/Chore/compare/" + chore_version + "..." + chore_remote_version + "\" target=\"_blank\">Version " + chore_remote_version + "</a> is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\" target=\"_blank\">here</a> to for instructions on how to update.</p>")
+                $("#update").html("<a href=\"https://github.com/joshf/Chore/compare/" + chore_version + "..." + chore_remote_version + "\" target=\"_blank\">Version " + chore_remote_version + "</a> is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\" target=\"_blank\">here</a> to for instructions on how to update.")
             } else {
-                $("#update").html("<p>No update available</p>")
+                $("#update").html("No update available")
             }
         });
     });
     $("li").on("click", ".delete", function() {
         var id = $(this).data("id");
         var element = $(this).parent();
-            $.ajax({
-                type: "POST",
-                url: "worker.php",
-                data: "action=deletecategory&id="+ id +"",
-                error: function() {
-                    $.notify({
-                        message: "Ajax query failed!",
-                        icon: "glyphicon glyphicon-warning-sign",
-                    },{
-                        type: "danger",
-                        allow_dismiss: true
-                    });
-                },
-                success: function() {
-                    $.notify({
-                        message: "Category deleted!",
-                        icon: "glyphicon glyphicon-ok",
-                    },{
-                        type: "success",
-                        allow_dismiss: true
-                    });
-                    $(element).remove();
-                }
+        $.ajax({
+            type: "POST",
+            url: "worker.php",
+            data: "action=deletecategory&id="+ id +"",
+            error: function() {
+                $.notify({
+                    message: "Ajax query failed!",
+                    icon: "glyphicon glyphicon-warning-sign",
+                },{
+                    type: "danger",
+                    allow_dismiss: true
+                });
+            },
+            success: function() {
+                $.notify({
+                    message: "Category deleted!",
+                    icon: "glyphicon glyphicon-ok",
+                },{
+                    type: "success",
+                    allow_dismiss: true
+                });
+                $(element).remove();
+            }
         });
     }); 
     $("#add_category").click(function() {
         var new_category = $("#new_category").val();
-        if (new_category !== null && new_category != "") {                                                         
+        if (new_category !== null && new_category != "") {
             $.ajax({
                 type: "POST",
                 url: "worker.php",
@@ -225,19 +227,19 @@ $(document).ready(function() {
                         allow_dismiss: true
                     });
                     $("#new_category").val("");
-                    $("#categories").append("<li class=\"list-group-item\">" + new_category + "</li>")
+                    $("#categories").append("<li class=\"list-group-item\">" + new_category + "</li>");
                 }
-            });               
-        }   
+            });
+        }
     });
     $("#add").click(function() {
-    	window.location.href = "add.php";
+        window.location.href = "add.php";
     });
     $("#settings").click(function() {
-    	window.location.href = "settings.php";
+        window.location.href = "settings.php";
     });
     $("#logout").click(function() {
-    	window.location.href = "logout.php";
+        window.location.href = "logout.php";
     });
 });
 </script>

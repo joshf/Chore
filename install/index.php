@@ -35,18 +35,18 @@ if (isset($_POST["install"])) {
         die("Error: Could not connect to database (" . mysqli_connect_error() . "). Check your database settings are correct.");
     }
     
-    //Create data table
+    //Create items table
     $createitemstable = "CREATE TABLE `items` (
     `id` int(8) NOT NULL,
-    `category` varchar(20) NOT NULL,
-    `highpriority` tinyint(1) NOT NULL,
+    `category_id` int(4) NOT NULL,
+    `priority` tinyint(1) NOT NULL,
     `item` varchar(300) NOT NULL,
     `details` varchar(300) NOT NULL,
     `created` date NOT NULL,
-    `has_due` tinyint(1)  NOT NULL DEFAULT \"0\",
+    `has_due` tinyint(1) NOT NULL DEFAULT \"0\",
     `due` date NOT NULL,
     `completed` tinyint(1) NOT NULL DEFAULT \"0\",
-    `datecompleted` date NOT NULL,
+    `date_completed` date NOT NULL
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB;";
     
@@ -65,12 +65,23 @@ if (isset($_POST["install"])) {
     ) ENGINE=InnoDB;";
     
     mysqli_query($con, $createuserstable) or die(mysqli_error($con));
+    
+    //Create categories table
+    $createcategoriestable = "CREATE TABLE `categories` (
+    `id` int(8) NOT NULL,
+    `category` varchar(30) NOT NULL
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB;";
+    
+    mysqli_query($con, $createcategoriestable) or die(mysqli_error($con));
 
     //Add keys
     mysqli_query($con, "ALTER TABLE `items` ADD PRIMARY KEY (`id`)");
     mysqli_query($con, "ALTER TABLE `users` ADD PRIMARY KEY (`id`)");
+    mysqli_query($con, "ALTER TABLE `categories` ADD PRIMARY KEY (`id`)");
     mysqli_query($con, "ALTER TABLE `items` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
     mysqli_query($con, "ALTER TABLE `users` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
+    mysqli_query($con, "ALTER TABLE `categories` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
     
     mysqli_query($con, "INSERT INTO `users` (user, password, salt, email, hash, api_key)
     VALUES (\"$user\",\"$password\",\"$salt\",\"$email\",\"\",\"$api_key\")");

@@ -150,7 +150,7 @@ if (mysqli_num_rows($getitems) != 0) {
         if ($item["priority"] == "1") {
            echo "<b>" . $item["item"] . "</b>"; 
         } else {
-            echo "" . $item["item"] . ""; 
+            echo $item["item"]; 
         }
             
         echo "</span><div class=\"pull-right\">";
@@ -190,7 +190,7 @@ $(document).ready(function () {
             var chore_remote_version = data.tag_name;
             var url = data.zipball_url;
             if (chore_version < chore_remote_version) {
-                $("#update").append("Version " + chore_remote_version + " is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\" target=\"_blank\">here</a> to for instructions on how to update.")
+                $("#update").append("Version " + chore_remote_version + " is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\" target=\"_blank\">here</a> to for instructions on how to update.");
                 Cookies.set("chore_didcheckforupdates", "1", { expires: 1 });
             }
         });
@@ -220,11 +220,10 @@ $(document).ready(function () {
         $(".list-group .list-group-item").each(function() {
             if ($(this).text().search(new RegExp(filter, "i")) < 0) {
                 $(this).addClass("hidden");
-                
             } else {
-                $(this).removeClass("hidden");                
+                $(this).removeClass("hidden");
                 count++;
-            }            
+            }
         });
         if (count === 0) {
             $(".list-group").prepend("<li class=\"list-group-item\" id=\"search-error\">No items found</li>");
@@ -262,13 +261,13 @@ $(document).ready(function () {
         });
     });
     $("#add").click(function() {
-    	window.location.href = "add.php";
+        window.location.href = "add.php";
     });
     $("#settings").click(function() {
-    	window.location.href = "settings.php";
+        window.location.href = "settings.php";
     });
     $("#logout").click(function() {
-    	window.location.href = "logout.php";
+        window.location.href = "logout.php";
     });
     $("li").on("click", ".list", function() {
         var id = $(this).data("id");
