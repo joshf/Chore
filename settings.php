@@ -118,7 +118,7 @@ mysqli_close($con);
 ?>
 </ul>
 <div class="form-group">
-<label class="control-label" for="newcategory">Category</label>
+<label class="control-label" for="new_category">Category</label>
 <input type="text" class="form-control" id="new_category" name="new_category" placeholder="Type a new category..." required>
 </div>
 <button id="add_category" class="btn btn-default"><span class="glyphicon glyphicon-plus" title="Add Category" aria-hidden="true"></span> Add Category</button>
@@ -206,7 +206,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: "worker.php",
-                data: "action=add_category&new_category=" + new_category + "",
+                data: "action=addcategory&new_category=" + new_category + "",
                 error: function() {
                     $.notify({
                         message: "Ajax Error!",
@@ -224,7 +224,7 @@ $(document).ready(function() {
                         type: "success",
                         allow_dismiss: true
                     });
-                    $("#newcategory").val("");
+                    $("#new_category").empty();
                     $("#categories").append("<li class=\"list-group-item\">" + new_category + "</li>")
                 }
             });               
