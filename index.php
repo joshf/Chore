@@ -89,8 +89,8 @@ if (isset($_GET["filter"])) {
 </div>
 <div class="col-md-4">
 <div class="form-group">
-<select class="form-control" id="filters" name="filters">
-<option value="index.php">No Filters</option>
+<select class="form-control" id="filters" name="filters" data-live-search="true">
+<option value="index.php">No Filter</option>
 <optgroup label="Filters">
 <option value="index.php?filter=priority">High Priority Tasks</option>
 <option value="index.php?filter=completed">Completed Tasks</option>

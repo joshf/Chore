@@ -212,6 +212,7 @@ $(document).ready(function() {
                     type: "success",
                     allow_dismiss: true
                 });
+                $("#category").val("");  
                 $("#add_form").trigger("reset");
             }
         });
