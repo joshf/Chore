@@ -69,6 +69,7 @@ if (isset($_GET["filter"])) {
 <link rel="apple-touch-icon" href="assets/icon.png">
 <link rel="stylesheet" href="assets/bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="screen">
 <link rel="stylesheet" href="assets/css/chore.css" type="text/css" media="screen">
+<link rel="stylesheet" href="assets/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" type="text/css" media="screen">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -181,6 +182,7 @@ mysqli_close($con);
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/js-cookie/src/js.cookie.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="assets/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">  
 $(document).ready(function () {
     var chore_version = "<?php echo $version; ?>";
@@ -205,13 +207,11 @@ $(document).ready(function () {
     if (ol.indexOf("filter") == -1) {
         Cookies.remove("filter");
     }
+   $("#filters").selectpicker();
     if (Cookies.get("filter")) {
         var filter = Cookies.get("filter");
-        $("#filters").addClass("hide");
-        $("#filters").val(filter);
-        setTimeout(function() {
-            $("#filters").removeClass("hide");
-        }, 100);
+       $("#filters").val(filter);
+       $("#filters").selectpicker('refresh');
     }
     $("#search").keyup(function() {
         $("#search-error").remove();
@@ -260,6 +260,14 @@ $(document).ready(function () {
             }
         });
     });
+    if (ol.indexOf("added") !== -1) {
+        var item_id = "118";
+        element = $(".list[data-id=\"" + item_id + "\"]").parent();
+        $(element).addClass("list-group-item-success");        
+        setTimeout(function() {
+            $(element).removeClass("list-group-item-success");            
+        }, 1000);
+    }
     $("#add").click(function() {
         window.location.href = "add.php";
     });

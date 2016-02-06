@@ -1,9 +1,6 @@
 #add, #settings, #logout, .complete, .delete, #addcategory, .list {
     cursor: pointer;
 }
-body {
-    padding-top: 20px;
-}
 li.pull-right:before {
     display: none;
 }
