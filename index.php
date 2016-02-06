@@ -190,7 +190,7 @@ $(document).ready(function () {
             var chore_remote_version = data.tag_name;
             var url = data.zipball_url;
             if (chore_version < chore_remote_version) {
-                $("#update").append("Version " + chore_remote_version + " is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\" target=\"_blank\">here</a> to for instructions on how to update.");
+                $("#update").html("<a href=\"https://github.com/joshf/Chore/compare/" + chore_version + "..." + chore_remote_version + "\" target=\"_blank\">Version " + chore_remote_version + "</a> is now available, click <a href=\"https://github.com/joshf/Chore/wiki/Updating-Chore\" target=\"_blank\">here</a> to for instructions on how to update.");
                 Cookies.set("chore_didcheckforupdates", "1", { expires: 1 });
             }
         });
