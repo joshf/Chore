@@ -151,7 +151,7 @@ $(document).ready(function() {
     $.fn.editable.defaults.showbuttons = true;
     $.fn.editable.defaults.url = "worker.php?action=edit&id=" + id + "";
     $.fn.editable.defaults.savenochange = true;
-    $.fn.editable.defaults.highlight = "#5cb85c";
+    $.fn.editable.defaults.highlight = "#D8EECC";
     $.fn.editable.defaults.toggle = "click";
     $("#item").editable({
         type: "text",

@@ -120,11 +120,11 @@ mysqli_close($con);
 <br>
 <h2>API Key</h2>
 <p>Your API key is: <b><span id="api_key"><?php echo $resultgetusersettings["api_key"]; ?></span></b></p>
-<button id="generate_api_key" class="btn btn-default"><span class="glyphicon glyphicon-lock" title="Generate New Key" aria-hidden="true"></span> Generate New Key</button>
+<button id="generate_api_key" class="btn btn-default"><span class="glyphicon glyphicon-refresh" title="Generate New Key" aria-hidden="true"></span> Generate New Key</button>
 <hr>
 <h2>Version</h2>
 <p><span id="update">You have Chore version <?php echo $version; ?></span></p>
-<button id="check_for_updates" class="btn btn-default"><span class="glyphicon glyphicon-refresh" title="Check For Update" aria-hidden="true"></span> Check For Update</button>
+<button id="check_for_updates" class="btn btn-default"><span class="glyphicon glyphicon-cloud-download" title="Check For Update" aria-hidden="true"></span> Check For Update</button>
 </div>
 <script src="assets/bower_components/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
