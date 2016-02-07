@@ -24,7 +24,7 @@ if (isset($_GET["start"])) {
         $state = "upgrade";
     }
 } else {
-    $state = "welcome";   
+    $state = "welcome";
 }
 
 ?>
@@ -57,7 +57,7 @@ if (isset($_GET["start"])) {
 <?php
 
 if ($state == "welcome") {
-    
+
 ?>
 <div class="alert alert-info">
 <h4 class="alert-heading">Upgrade Available</h4>
@@ -65,21 +65,21 @@ if ($state == "welcome") {
 <?php
 
 } elseif ($state == "upgrade") {
-    
+
     //Connect to database
     @$con = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if (mysqli_connect_errno()) {
         die("Error: Could not connect to database (" . mysqli_connect_error() . "). Check your database settings are correct.");
     }
-    
+
     //mysqli_query($con, "");
     mysqli_close($con);
-    
+
     //Write Version
     $installversion = fopen("../.version", "w");
     fwrite($installversion, $version);
     fclose($installversion);
-    
+
 ?>
 <div class="alert alert-success">
 <h4 class="alert-heading">Upgrade Complete</h4>
@@ -91,7 +91,7 @@ if ($state == "welcome") {
 <h4 class="alert-heading">No upgrade required</h4>
 <p>Chore is already up to date and does not require an upgrade<p><a href="../login.php" class="btn btn-info"><span class="glyphicon glyphicon-log-in" title="Login" aria-hidden="true"></span> Go To Login</a></p>
 <?php
-} else {    
+} else {
 ?>
 <div class="alert alert-danger">
 <h4 class="alert-heading">Upgrade Error</h4>

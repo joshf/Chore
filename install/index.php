@@ -10,12 +10,12 @@ if (file_exists("../config.php")) {
 }
 
 if (isset($_POST["install"])) {
-    
+
     $dbhost = $_POST["dbhost"];
     $dbuser = $_POST["dbuser"];
     $dbpassword = $_POST["dbpassword"];
     $dbname = $_POST["dbname"];
-    
+
     $user = $_POST["user"];
     $email = $_POST["email"];
     if (empty($_POST["password"])) {
@@ -28,13 +28,13 @@ if (isset($_POST["install"])) {
         $password = hash("sha256", $salt . $hashedpassword);
     }
     $api_key = substr(str_shuffle(MD5(microtime())), 0, 50);
-    
+
     //Check if we can connect
     @$con = mysqli_connect($dbhost, $dbuser, $dbpassword, $dbname);
     if (mysqli_connect_errno()) {
         die("Error: Could not connect to database (" . mysqli_connect_error() . "). Check your database settings are correct.");
     }
-    
+
     //Create items table
     $createitemstable = "CREATE TABLE `items` (
     `id` int(8) NOT NULL,
@@ -49,9 +49,9 @@ if (isset($_POST["install"])) {
     `date_completed` date NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB;";
-    
+
     mysqli_query($con, $createitemstable) or die(mysqli_error($con));
-	
+
     //Create users table
     $createuserstable = "CREATE TABLE `users` (
     `id` int(8) NOT NULL,
@@ -63,16 +63,16 @@ if (isset($_POST["install"])) {
     `api_key` varchar(200) NOT NULl,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB;";
-    
+
     mysqli_query($con, $createuserstable) or die(mysqli_error($con));
-    
+
     //Create categories table
     $createcategoriestable = "CREATE TABLE `categories` (
     `id` int(8) NOT NULL,
     `category` varchar(30) NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB;";
-    
+
     mysqli_query($con, $createcategoriestable) or die(mysqli_error($con));
 
     //Add keys
@@ -82,24 +82,24 @@ if (isset($_POST["install"])) {
     mysqli_query($con, "ALTER TABLE `items` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
     mysqli_query($con, "ALTER TABLE `users` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
     mysqli_query($con, "ALTER TABLE `categories` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
-    
+
     mysqli_query($con, "INSERT INTO `users` (user, password, salt, email, hash, api_key)
     VALUES (\"$user\",\"$password\",\"$salt\",\"$email\",\"\",\"$api_key\")");
-    
+
     mysqli_close($con);
-    
+
     $installstring = "<?php\n\n//Database Settings\ndefine('DB_HOST', " . var_export($dbhost, true) . ");\ndefine('DB_USER', " . var_export($dbuser, true) . ");\ndefine('DB_PASSWORD', " . var_export($dbpassword, true) . ");\ndefine('DB_NAME', " . var_export($dbname, true) . ");\n\n?>";
 
     //Write Config
     $configfile = fopen("../config.php", "w");
     fwrite($configfile, $installstring);
     fclose($configfile);
-    
+
     //Write Version
     $installversion = fopen("../.version", "w");
     fwrite($installversion, $version);
     fclose($installversion);
-    
+
 }
 
 ?>
@@ -131,8 +131,8 @@ if (isset($_POST["install"])) {
 <div class="container-fluid top-pad">
 <?php
 
-if (isset($_POST["install"])) {    
- 
+if (isset($_POST["install"])) {
+
 ?>
 <p>Chore has been successfully installed. Please delete the "install" folder from your server, as it poses a potential security risk!</p>
 <a href="../login.php" class="btn btn-default" role="button">Login</a>
