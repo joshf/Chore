@@ -98,7 +98,7 @@ while($category = mysqli_fetch_assoc($getcategories)) {
 </div>
 </div>
 </div>
-<div class="checkbox">    
+<div class="checkbox">
 <label>
 <input type="checkbox" id="has_due" name="has_due"> <span id="has_due_message">Due date required</span>
 </label>
@@ -121,7 +121,7 @@ while($category = mysqli_fetch_assoc($getcategories)) {
 <script src="assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap-validator/dist/validator.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript">  
+<script type="text/javascript">
 $(document).ready(function() {
     $("#has_due").click(function() {
         if ($(this).is(":checked")) {
@@ -178,13 +178,13 @@ $(document).ready(function() {
     });
     $("#add_form").on("validate.bs.validator", function (e) {
         if ($("#due").parent().hasClass("has-error")) {
-            $("#has_due_message").addClass("text-danger");    
+            $("#has_due_message").addClass("text-danger");
         } else {
             $("#has_due_message").removeClass("text-danger");
         }
     });
     $("#add_form").on("valid.bs.validator", function (e) {
-        $("#due").parent().removeClass("has-error"); 
+        $("#due").parent().removeClass("has-error");
         $("#has_due_message").removeClass("text-danger");
     });
     $("#add_form").validator().on("submit", function (e) {
@@ -212,7 +212,7 @@ $(document).ready(function() {
                     type: "success",
                     allow_dismiss: true
                 });
-                $("#category").val("");  
+                $("#category").val("");
                 $("#add_form").trigger("reset");
             }
         });
@@ -226,7 +226,7 @@ $(document).ready(function() {
     });
     $("#logout").click(function() {
         window.location.href = "logout.php";
-    }); 
+    });
 });
 </script>
 </body>

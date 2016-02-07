@@ -71,7 +71,7 @@ N.B: The upgrade will only upgrade from the previous version of Chore (e.g 0.1 t
 Removal:
 --------
 
-To remove Chore, simply delete the Chore folder from your server and delete the "items" and "users" tables from your database. Then delete the "Chore" folder via FTP or your hosts control panel. 
+To remove Chore, simply delete the Chore folder from your server and delete the "items" and "users" tables from your database. Then delete the "Chore" folder via FTP or your hosts control panel.
 
 Support:
 -------------

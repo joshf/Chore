@@ -52,7 +52,7 @@ if (isset($_POST["password"]) && isset($_POST["username"])) {
 }
 
 if (!isset($_SESSION["chore_user"])) {
-    
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,7 +75,7 @@ if (!isset($_SESSION["chore_user"])) {
 <div class="container">
 <form method="post" class="form-signin">
 <img class="logo-img" src="assets/icon.png" alt="Chore">
-<?php 
+<?php
 if (isset($_GET["login_error"])) {
     echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> Incorrect login.</div>";
 } elseif (isset($_GET["logged_out"])) {

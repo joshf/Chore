@@ -29,14 +29,14 @@ if (mysqli_num_rows($getusersettings) == 0) {
 $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 
 if (isset($_GET["item"])) {
-	$item_id = mysqli_real_escape_string($con, $_GET["item"]);	
+	$item_id = mysqli_real_escape_string($con, $_GET["item"]);
 } else {
 	die("Error: No item passed!");
 }
 
 $itemcheck = mysqli_query($con, "SELECT `id` FROM `items` WHERE `id` = $item_id");
 if ($itemcheck === FALSE || mysqli_num_rows($itemcheck) == "0") {
-    die("Error: Item does not exist!");   
+    die("Error: Item does not exist!");
 }
 $resultitemcheck = mysqli_fetch_assoc($itemcheck);
 
@@ -74,47 +74,47 @@ $getitems = mysqli_query($con, "SELECT items.id, categories.category, categories
 if (mysqli_num_rows($getitems) != 0) {
     while($item = mysqli_fetch_assoc($getitems)) {
         echo "<p><span class=\"glyphicon glyphicon-tasks\" title=\"Item\" aria-hidden=\"true\"></span> <span id=\"item\">" . $item["item"] . "</span>";
-        
+
         if ($item["priority"] == "1") {
-            echo " <span id=\"priority\" class=\"text-danger\">(High Priority)</span>";            
+            echo " <span id=\"priority\" class=\"text-danger\">(High Priority)</span>";
         }
-        
+
         echo "</p><p><span class=\"glyphicon glyphicon-zoom-in\" title=\"Details\" aria-hidden=\"true\"></span> <span id=\"details\">" . $item["details"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-info-sign\" title=\"Created\" aria-hidden=\"true\"></span> <span id=\"created\">" . $item["created"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-tags\" title=\"Category\" aria-hidden=\"true\"></span> <span id=\"category\" data-id=\"" . $item["id"] . "\">" . $item["category"] . "</span></p>";
-       
+
         $today = strtotime(date("Y-m-d"));
         $rawdue = $item["due"];
         $due = strtotime($item["due"]);
         $datediff = abs($today - $due);
         $due_in = floor($datediff/(60*60*24));
-              
+
         if ($item["has_due"] != "1") {
             $rawdue = "";
         } else {
             echo "<p><span class=\"glyphicon glyphicon-calendar\" title=\"Due\" aria-hidden=\"true\"></span> <span id=\"due\">" . $rawdue . "</span> ";
         }
-        
+
         if ($item["has_due"] == "1") {
-            
+
             if ($today > $due) {
                 if ($due_in == "1") {
                     $string = "Overdue by " . $due_in . " day";
                 } else {
                     $string = "Overdue by " . $due_in . " days";
-                }                    
+                }
                 $overdue = "true";
             } else {
                 if ($due_in == "1") {
                     $string = "Due in " . $due_in . " day";
                 } else {
                     $string = "Due in " . $due_in . " days";
-                } 
+                }
             }
             if ($due_in == "0") {
                 $string = "Due Today";
                 $overdue = "true";
-            }                 
+            }
             if ($overdue == "true") {
                 echo "<span id=\"due_in\" class=\"text-danger\">";
             } else {
@@ -124,7 +124,7 @@ if (mysqli_num_rows($getitems) != 0) {
         } else {
             echo "<span id=\"due_in\">";
         }
-        
+
         echo "<div class=\"btn-group\" role=\"group\">";
         if ($item["completed"] == "0") {
             echo "<button type=\"button\" id=\"complete\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-ok\" title=\"Complete\" aria-hidden=\"true\"></span> Complete</button>";
@@ -143,11 +143,11 @@ mysqli_close($con);
 <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/moment.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript">  
+<script type="text/javascript">
 $(document).ready(function() {
     var id = <?php echo $item_id; ?>;
-    $.fn.editable.defaults.mode = "popup";    
-    $.fn.editable.defaults.placement = "bottom";  
+    $.fn.editable.defaults.mode = "popup";
+    $.fn.editable.defaults.placement = "bottom";
     $.fn.editable.defaults.showbuttons = true;
     $.fn.editable.defaults.url = "worker.php?action=edit&id=" + id + "";
     $.fn.editable.defaults.savenochange = true;
@@ -193,7 +193,7 @@ $(document).ready(function() {
                 $("#due_in").html("(" + due_in + ")");
             }
         });
-    });   
+    });
     $("#category").editable({
         type: "select",
         value: $("#category").data("id"),
@@ -236,7 +236,7 @@ $(document).ready(function() {
                 console.log("Error: could not connect to worker!");
             },
             success: function() {
-            	window.location.href = "index.php";  
+            	window.location.href = "index.php";
             }
         });
     });

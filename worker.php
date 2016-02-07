@@ -63,13 +63,13 @@ if (in_array($action, $actions)) {
         } elseif (isset($_GET["action"])) {
             $id = mysqli_real_escape_string($con, $_GET["id"]);
         }
-        
-        if ($action == "deletecategory") {       
+
+        if ($action == "deletecategory") {
             $checkid = mysqli_query($con, "SELECT `id` FROM `categories` WHERE `id` = $id");
         } else {
             $checkid = mysqli_query($con, "SELECT `id` FROM `items` WHERE `id` = $id");
         }
-               
+
         if (mysqli_num_rows($checkid) == 0) {
         	die("Error: ID does not exist!");
         }
@@ -111,7 +111,7 @@ if (isset($_POST["pk"])) {
 }
 
 if ($action == "add") {
-    
+
     if (empty($item)) {
         die("Error: Data was empty!");
     }
@@ -121,13 +121,13 @@ if ($action == "add") {
     } else {
         $priority = "0";
     }
-    
+
     if (empty($due)) {
         $has_due = "0";
     } else {
         $has_due = "1";
     }
-        
+
     $datecheck = "/\d{1,2}\-\d{1,2}\-\d{4}/";
     if (preg_match($datecheck, $due)) {
         $segments = explode("-", $due);
@@ -136,26 +136,26 @@ if ($action == "add") {
         }
         $due = "$year-$month-$day";
     }
-    
+
     mysqli_query($con, "INSERT INTO `items` (`category_id`, `priority`, `item`, `details`, `has_due`, `created`, `due`, `completed`, `date_completed`)
     VALUES (\"$category\",\"$priority\",\"$item\",\"$details\",\"$has_due\",CURDATE(),\"$due\",\"0\",\"\")");
-    
+
     echo "Info: Item added!";
-    
+
 } elseif ($action == "addcategory") {
-    
+
     if (empty($new_category)) {
         die("Error: Data was empty!");
     }
 
     mysqli_query($con, "INSERT INTO `categories` (`category`)
     VALUES (\"$new_category\")");
-        
+
     echo mysqli_insert_id($con);
 
-        
+
 } elseif ($action == "edit") {
-    
+
     if (isset($_POST["value"])) {
         $value = mysqli_real_escape_string($con, $_POST["value"]);
     } elseif (isset($_GET["value"])) {
@@ -163,13 +163,13 @@ if ($action == "add") {
     } else {
         die("Error: Blank value");
     }
-    
+
     if ($pk == "1") {
         mysqli_query($con, "UPDATE `items` SET `item` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "2") {
         mysqli_query($con, "UPDATE `items` SET `details` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "3") {
-        
+
         $datecheck = "/\d{1,2}\-\d{1,2}\-\d{4}/";
         if (preg_match($datecheck, $value)) {
             $segments = explode("-", $value);
@@ -178,7 +178,7 @@ if ($action == "add") {
             }
             $value = "$year-$month-$day";
         }
-        
+
         mysqli_query($con, "UPDATE `items` SET `has_due` = \"1\", `due` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "4") {
         mysqli_query($con, "UPDATE `items` SET `category_id` = \"$value\" WHERE `id` = \"$id\"");
@@ -189,41 +189,41 @@ if ($action == "add") {
     echo "Info: Item edited!";
 
 } elseif ($action == "listcats") {
-    
+
     $getcats = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
-    
-    while($cat = mysqli_fetch_assoc($getcats)) {    
+
+    while($cat = mysqli_fetch_assoc($getcats)) {
         $cats[] = array(
             "value" => $cat["id"],
             "text" => $cat["category"]
-        );    
+        );
     }
 
-    $cats[] = array("text"=> "None", "value" => "");    
-       
+    $cats[] = array("text"=> "None", "value" => "");
+
     echo json_encode($cats);
 
 } elseif ($action == "complete") {
     mysqli_query($con, "UPDATE `items` SET `completed` = \"1\", `date_completed` = CURDATE() WHERE `id` = \"$id\"");
-    
+
     echo "Info: Item marked as completed!";
-    
+
 } elseif ($action == "restore") {
     mysqli_query($con, "UPDATE `items` SET `completed` = \"0\" WHERE `id` = \"$id\"");
-    
+
     echo "Info: Item restored!";
-    
+
 } elseif ($action == "delete") {
     mysqli_query($con, "DELETE FROM `items` WHERE `id` = \"$id\"");
-    
+
     echo "Info: Item deleted!";
 } elseif ($action == "deletecategory") {
     mysqli_query($con, "DELETE FROM `categories` WHERE `id` = \"$id\"");
-    
-    echo "Info: Category deleted!";   
+
+    echo "Info: Category deleted!";
 } elseif ($action == "info") {
     $getitems = mysqli_query($con, "SELECT `id`, `category_id`, `priority`, `item`, `details`, `created`, `has_due`, `due`, `completed`, `date_completed` FROM `items` WHERE `id` = \"$id\"");
-    
+
     while($item = mysqli_fetch_assoc($getitems)) {
         $items[] = array(
             "id" => $item["id"],
@@ -238,36 +238,36 @@ if ($action == "add") {
             "date_completed" => $item["date_completed"]
         );
     }
-    
+
     echo json_encode(array("item" => $items));
-    
+
 } elseif ($action == "duein") {
     $getdue = mysqli_query($con, "SELECT `due` FROM `items` WHERE `id` = \"$id\"");
-    $getdueresults = mysqli_fetch_assoc($getdue); 
+    $getdueresults = mysqli_fetch_assoc($getdue);
     $today = strtotime(date("Y-m-d"));
     $due = strtotime($getdueresults["due"]);
     $datediff = abs($today - $due);
     $duein = floor($datediff/(60*60*24));
-        
+
     if ($today > $due) {
         if ($duein == "1") {
             $string = "Overdue by " . $duein . " day";
         } else {
             $string = "Overdue by " . $duein . " days";
-        }                    
+        }
     } else {
         if ($duein == "1") {
             $string = "Due in " . $duein . " day";
         } else {
             $string = "Due in " . $duein . " days";
-        } 
+        }
     }
     if ($duein == "0") {
         $string = "Due Today";
     }
-    
+
     echo $string;
-    
+
 } elseif ($action == "generateapikey") {
     $api_key = substr(str_shuffle(MD5(microtime())), 0, 50);
     mysqli_query($con, "UPDATE `users` SET `api_key` = \"$api_key\" WHERE `id` = \"" . $_SESSION["chore_user"] . "\"");

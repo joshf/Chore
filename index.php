@@ -46,7 +46,7 @@ if (isset($_GET["filter"])) {
             } else {
     		    $checkcatexists = mysqli_query($con, "SELECT `id`, `category` FROM `categories` WHERE `id` = \"$cat_id\"");
     		    if (mysqli_num_rows($checkcatexists) == 0) {
-    		        $filter = "normal";                
+    		        $filter = "normal";
     		    }
             }
 		} else {
@@ -137,30 +137,30 @@ if ($filter == "completed") {
 	$getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" ORDER BY items.created ASC");
 } else {
     $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\"");
-} 
+}
 
 if (mysqli_num_rows($getitems) != 0) {
     while($item = mysqli_fetch_assoc($getitems)) {
-        
+
         //Logic
         $today = strtotime(date("Y-m-d"));
         $due = strtotime($item["due"]);
-        
+
         echo "<li class=\"list-group-item\"><span class=\"list\" data-id=\"" . $item["id"] . "\">";
-    
+
         if ($item["priority"] == "1") {
-           echo "<b>" . $item["item"] . "</b>"; 
+           echo "<b>" . $item["item"] . "</b>";
         } else {
-            echo $item["item"]; 
+            echo $item["item"];
         }
-            
+
         echo "</span><div class=\"pull-right\">";
         if ($item["has_due"] == "1") {
             if ($today >= $due) {
                 echo "<span class=\"hidden-xs badge badge-red\">" . $item["due"] . "</span> ";
             } else {
                 echo "<span class=\"hidden-xs badge\">" . $item["due"] . "</span> ";
-            }            
+            }
         }
         if ($item["category"] != "") {
             echo "<span class=\"hidden-xs badge badge-blue\">" . $item["category"] . "</span> ";
@@ -173,7 +173,7 @@ if (mysqli_num_rows($getitems) != 0) {
 
 mysqli_close($con);
 
-?>      
+?>
 </ul>
 <span id="update"></span>
 <span class="pull-right text-muted"><small>Version <?php echo $version; ?></small></span>
@@ -183,10 +183,10 @@ mysqli_close($con);
 <script src="assets/bower_components/js-cookie/src/js.cookie.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript">  
+<script type="text/javascript">
 $(document).ready(function () {
     var chore_version = "<?php echo $version; ?>";
-    if (!Cookies.get("chore_didcheckforupdates")) {
+    if (!Cookies.get("chore_didcheckforupddates")) {
         $.getJSON("https://api.github.com/repos/joshf/Chore/releases").done(function(resp) {
             var data = resp[0];
             var chore_remote_version = data.tag_name;
@@ -260,14 +260,6 @@ $(document).ready(function () {
             }
         });
     });
-    if (ol.indexOf("added") !== -1) {
-        var item_id = "118";
-        element = $(".list[data-id=\"" + item_id + "\"]").parent();
-        $(element).addClass("list-group-item-success");        
-        setTimeout(function() {
-            $(element).removeClass("list-group-item-success");            
-        }, 1000);
-    }
     $("#add").click(function() {
         window.location.href = "add.php";
     });

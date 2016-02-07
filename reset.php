@@ -17,7 +17,7 @@ if (mysqli_connect_errno()) {
 //Get path to Chore
 $currenturl = $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
 $pathtoscriptwithslash = "http://" . substr($currenturl, 0, strpos($currenturl, "reset.php"));
-$pathtoscript = rtrim($pathtoscriptwithslash, "/");	
+$pathtoscript = rtrim($pathtoscriptwithslash, "/");
 
 //Check that passed email and hash are correct
 if (isset($_GET["email"]) && isset($_GET["hash"])) {
@@ -29,20 +29,20 @@ if (isset($_GET["email"]) && isset($_GET["hash"])) {
         header("Location: reset.php?hash_error=true");
         exit;
     }
-    
+
     //Generate new password
     $rawpassword = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz0123456789"), 0, 10);
     $randsalt = md5(uniqid(rand(), true));
-    $salt = substr($randsalt, 0, 3);    
+    $salt = substr($randsalt, 0, 3);
     $hashedpassword = hash("sha256", $rawpassword);
     $password = hash("sha256", $salt . $hashedpassword);
     mysqli_query($con, "UPDATE `users` SET `password` = \"$password\", `salt` = \"$salt\", `hash` = \"\" WHERE `id` = \"" . $checkinforesult["id"] . "\"");
-    
+
     //Send new pass email
 	$to = $checkinforesult["email"];
     $subject = "Chore » Your New Password";
 	$headers = "MIME-Version: 1.0\r\n";
-    $headers .= "From: Chore Mailer <chore@" . $_SERVER["SERVER_NAME"] . ">\r\n";    
+    $headers .= "From: Chore Mailer <chore@" . $_SERVER["SERVER_NAME"] . ">\r\n";
 	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
     $message = "<html><body><p>Hi " . $checkinforesult["user"] . ",</p><p>Your new password is <b>$rawpassword</b>.</p><p>Click <a href=\"$pathtoscript/login.php\">here</a> to go to the login page.</p><p>Your welcome!<br>- Chore Mailer</p></html></body>";
     if (mail($to, $subject, $message, $headers)) {
@@ -62,16 +62,16 @@ if (isset($_POST["email"])) {
         header("Location: reset.php?email_error=true");
         exit;
     }
-    
+
     //Generate temporary hash and store in database
     $hash = substr(str_shuffle(MD5(microtime())), 0, 50);
     mysqli_query($con, "UPDATE `users` SET `hash` = \"$hash\" WHERE `id` = \"" . $userinforesult["id"] . "\"");
-    	
+
     //Send reset email
 	$to = $userinforesult["email"];
     $subject = "Chore » Reset Password";
 	$headers = "MIME-Version: 1.0\r\n";
-    $headers .= "From: Chore Mailer <chore@" . $_SERVER["SERVER_NAME"] . ">\r\n";    
+    $headers .= "From: Chore Mailer <chore@" . $_SERVER["SERVER_NAME"] . ">\r\n";
 	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
     $message = "<html><body><p>Hi " . $userinforesult["user"] . ",</p><p>You have requested to reset your Chore password, to do so click <a href=\"$pathtoscript/reset.php?email=$to&hash=$hash\">here</a> and a new password will be emailed to you.</p><p>If you did not initiate this request, simply ignore this email.</p><p>Your welcome!<br>- Chore Mailer</p></html></body>";
     if (mail($to, $subject, $message, $headers)) {
@@ -104,7 +104,7 @@ if (isset($_POST["email"])) {
 <div class="container">
 <form method="post" class="form-signin">
 <img class="logo-img" src="assets/icon.png" alt="Chore">
-<?php 
+<?php
 if (isset($_GET["email_error"])) {
     echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> Email does not exist.</div>";
 } elseif (isset($_GET["sent_reset_confirm"])) {
@@ -115,7 +115,7 @@ if (isset($_GET["email_error"])) {
     echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> Message could not be sent.</div>";
 } elseif (isset($_GET["hash_error"])) {
     echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button><span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> Hash error. Link may have already been used.</div>";
-} 
+}
 ?>
 <label for="email" class="sr-only">Email</label>
 <input type="email" id="email" name="email" class="form-control" placeholder="Email..." required autofocus>

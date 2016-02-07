@@ -14,7 +14,7 @@ session_start();
 if (!isset($_SESSION["chore_user"])) {
     header("Location: login.php");
     exit;
-} 
+}
 
 //Connect to database
 @$con = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -46,10 +46,10 @@ if (!empty($_POST)) {
 
     //Update Settings
     mysqli_query($con, "UPDATE `users` SET `user` = \"$user\", `password` = \"$password\", `email` = \"$email\", `salt` = \"$salt\" WHERE `user` = \"" . $resultgetusersettings["user"] . "\"");
-    
+
     //Show updated values
     header("Location: settings.php");
-    
+
     exit;
 }
 
@@ -109,7 +109,7 @@ if (mysqli_num_rows($getcategories) != 0) {
     echo "<li class=\"list-group-item\">No categories to show</li>";
 }
 mysqli_close($con);
-    
+
 ?>
 </ul>
 <div class="form-group">
@@ -206,7 +206,7 @@ $(document).ready(function() {
         if (e.which == 13) {
             $("#add_category").click();
         }
-    }); 
+    });
     $("#add_category").click(function() {
         var new_category = $("#new_category").val();
         if (new_category !== null && new_category != "") {
