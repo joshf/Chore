@@ -39,11 +39,11 @@ if (isset($_GET["email"]) && isset($_GET["hash"])) {
     mysqli_query($con, "UPDATE `users` SET `password` = \"$password\", `salt` = \"$salt\", `hash` = \"\" WHERE `id` = \"" . $checkinforesult["id"] . "\"");
 
     //Send new pass email
-	$to = $checkinforesult["email"];
+    $to = $checkinforesult["email"];
     $subject = "Chore » Your New Password";
-	$headers = "MIME-Version: 1.0\r\n";
+    $headers = "MIME-Version: 1.0\r\n";
     $headers .= "From: Chore Mailer <chore@" . $_SERVER["SERVER_NAME"] . ">\r\n";
-	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
     $message = "<html><body><p>Hi " . $checkinforesult["user"] . ",</p><p>Your new password is <b>$rawpassword</b>.</p><p>Click <a href=\"$pathtoscript/login.php\">here</a> to go to the login page.</p><p>Your welcome!<br>- Chore Mailer</p></html></body>";
     if (mail($to, $subject, $message, $headers)) {
         header("Location: reset.php?sent_pass_confirm=true");
@@ -68,11 +68,11 @@ if (isset($_POST["email"])) {
     mysqli_query($con, "UPDATE `users` SET `hash` = \"$hash\" WHERE `id` = \"" . $userinforesult["id"] . "\"");
 
     //Send reset email
-	$to = $userinforesult["email"];
+    $to = $userinforesult["email"];
     $subject = "Chore » Reset Password";
-	$headers = "MIME-Version: 1.0\r\n";
+    $headers = "MIME-Version: 1.0\r\n";
     $headers .= "From: Chore Mailer <chore@" . $_SERVER["SERVER_NAME"] . ">\r\n";
-	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
     $message = "<html><body><p>Hi " . $userinforesult["user"] . ",</p><p>You have requested to reset your Chore password, to do so click <a href=\"$pathtoscript/reset.php?email=$to&hash=$hash\">here</a> and a new password will be emailed to you.</p><p>If you did not initiate this request, simply ignore this email.</p><p>Your welcome!<br>- Chore Mailer</p></html></body>";
     if (mail($to, $subject, $message, $headers)) {
         header("Location: reset.php?sent_reset_confirm=true");

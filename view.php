@@ -29,9 +29,9 @@ if (mysqli_num_rows($getusersettings) == 0) {
 $resultgetusersettings = mysqli_fetch_assoc($getusersettings);
 
 if (isset($_GET["item"])) {
-	$item_id = mysqli_real_escape_string($con, $_GET["item"]);
+    $item_id = mysqli_real_escape_string($con, $_GET["item"]);
 } else {
-	die("Error: No item passed!");
+    die("Error: No item passed!");
 }
 
 $itemcheck = mysqli_query($con, "SELECT `id` FROM `items` WHERE `id` = $item_id");
