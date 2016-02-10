@@ -86,7 +86,7 @@ if (mysqli_num_rows($doesnoneexist) == 0) {
 //Get categories
 $getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
 while($category = mysqli_fetch_assoc($getcategories)) {
-        echo "<option value=\"" . $category["id"] . "\">" . ucfirst($category["category"]) . "</option>";
+    echo "<option value=\"" . $category["id"] . "\">" . ucfirst($category["category"]) . "</option>";
 }
 
 ?>
