@@ -164,17 +164,26 @@ $(document).ready(function() {
         title: "Details",
     });
     $("#due").editable({
-        type: "combodate",
-        combodate: {
-            minYear: moment().get("year"),
-            maxYear: moment().get("year") + 2,
-            firstItem: "none",
-            smartDays: true
+        type: "date",
+        datepicker: {
+            autoclose: true,
+            todayHighlight: true,
         },
         pk: 3,
         title: "Due",
     });
-   $("#due").on("save", function(e, params) {
+    $("#due").on("shown", function(e, editable) {
+        $(".icon-arrow-right").addClass("glyphicon glyphicon-chevron-right").removeClass("icon-arrow-right");
+        $(".icon-arrow-left").addClass("glyphicon glyphicon-chevron-left").removeClass("icon-arrow-left");
+        $(".editable-clear").addClass("hidden");
+    });
+    $("#due").on("save", function(e, params) {
+        var val =  params.newValue;
+        if (val === null) {
+            $("#due_in").addClass("text-danger");
+            $("#due_in").html("(Could not calculate due dates)");
+            return false;
+        }
         $.ajax({
             type: "POST",
             url: "worker.php",
