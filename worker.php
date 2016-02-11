@@ -164,7 +164,7 @@ if ($action == "add") {
     } elseif (isset($_GET["value"])) {
         $value = mysqli_real_escape_string($con, $_GET["value"]);
     } else {
-        die("Error: Blank value");
+        die("Error: Blank value!");
     }
 
     if ($pk == "1") {
@@ -250,26 +250,15 @@ if ($action == "add") {
     $today = strtotime(date("Y-m-d"));
     $due = strtotime($getdueresults["due"]);
     $datediff = abs($today - $due);
-    $duein = floor($datediff/(60*60*24));
+    $daysdiff = floor($datediff/(60*60*24));
 
-    if ($today > $due) {
-        if ($duein == "1") {
-            $string = "Overdue by " . $duein . " day";
-        } else {
-            $string = "Overdue by " . $duein . " days";
-        }
+    if ($due < $today) {
+        $duein = "-" . $daysdiff . "";
     } else {
-        if ($duein == "1") {
-            $string = "Due in " . $duein . " day";
-        } else {
-            $string = "Due in " . $duein . " days";
-        }
+        $duein = $daysdiff;
     }
-    if ($duein == "0") {
-        $string = "Due Today";
-    }
-
-    echo $string;
+    
+    echo $duein;
 
 } elseif ($action == "generateapikey") {
     $api_key = substr(str_shuffle(MD5(microtime())), 0, 50);

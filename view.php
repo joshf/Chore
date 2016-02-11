@@ -83,46 +83,12 @@ if (mysqli_num_rows($getitems) != 0) {
         echo "<p><span class=\"glyphicon glyphicon-info-sign\" title=\"Created\" aria-hidden=\"true\"></span> <span id=\"created\">" . $item["created"] . "</span></p>";
         echo "<p><span class=\"glyphicon glyphicon-tags\" title=\"Category\" aria-hidden=\"true\"></span> <span id=\"category\" data-id=\"" . $item["id"] . "\">" . $item["category"] . "</span></p>";
 
-        $today = strtotime(date("Y-m-d"));
-        $rawdue = $item["due"];
-        $due = strtotime($item["due"]);
-        $datediff = abs($today - $due);
-        $due_in = floor($datediff/(60*60*24));
+        $due = $item["due"];
 
         if ($item["has_due"] != "1") {
-            $rawdue = "";
+            $due = "";
         } else {
-            echo "<p><span class=\"glyphicon glyphicon-calendar\" title=\"Due\" aria-hidden=\"true\"></span> <span id=\"due\">" . $rawdue . "</span> ";
-        }
-
-        if ($item["has_due"] == "1") {
-
-            if ($today > $due) {
-                if ($due_in == "1") {
-                    $string = "Overdue by " . $due_in . " day";
-                } else {
-                    $string = "Overdue by " . $due_in . " days";
-                }
-                $overdue = "true";
-            } else {
-                if ($due_in == "1") {
-                    $string = "Due in " . $due_in . " day";
-                } else {
-                    $string = "Due in " . $due_in . " days";
-                }
-            }
-            if ($due_in == "0") {
-                $string = "Due Today";
-                $overdue = "true";
-            }
-            if ($overdue == "true") {
-                echo "<span id=\"due_in\" class=\"text-danger\">";
-            } else {
-                echo "<span id=\"due_in\">";
-            }
-            echo "($string)</span></p>";
-        } else {
-            echo "<span id=\"due_in\">";
+            echo "<p><span class=\"glyphicon glyphicon-calendar\" title=\"Due\" aria-hidden=\"true\"></span> <span id=\"due\">" . $due . "</span> <span id=\"due_in\"></span></p>";
         }
 
         echo "<div class=\"btn-group\" role=\"group\">";
@@ -193,15 +159,55 @@ $(document).ready(function() {
             },
             success: function(due_in) {
                 $("#due_in").removeClass("text-danger");
-                if(due_in.indexOf("Overdue") != -1) {
-                    $("#due_in").addClass("text-danger");
+                if (due_in == 1) {
+                    var unit = "day" 
+                } else {
+                    var unit = "days"
                 }
-                if(due_in.indexOf("Due Today") != -1) {
-                    $("#due_in").addClass("text-danger");
+                if (due_in <= 1) {
+                    if (due_in == 0) {
+                        $("#due_in").html("(Due Today)");
+                        $("#due_in").addClass("text-danger");
+                    } else {
+                        due_in = due_in.replace("-", "");
+                        $("#due_in").html("(Due " + due_in + " " + unit + " ago)");
+                        $("#due_in").addClass("text-danger");
+                    }
+                } else {
+                    $("#due_in").html("(Due in " + due_in + " " + unit + ")");
+                    $("#due_in").removeClass("text-danger");
                 }
-                $("#due_in").html("(" + due_in + ")");
             }
         });
+    });
+    $.ajax({
+        type: "POST",
+        url: "worker.php",
+        data: "action=duein&id="+ id +"",
+        error: function() {
+            console.log("Error: could not connect to worker!");
+        },
+        success: function(due_in) {
+            $("#due_in").removeClass("text-danger");
+            if (due_in == 1) {
+                var unit = "day" 
+            } else {
+                var unit = "days"
+            }
+            if (due_in <= 1) {
+                if (due_in == 0) {
+                    $("#due_in").html("(Due Today)");
+                    $("#due_in").addClass("text-danger");
+                } else {
+                    due_in = due_in.replace("-", "");
+                    $("#due_in").html("(Due " + due_in + " " + unit + " ago)");
+                    $("#due_in").addClass("text-danger");
+                }
+            } else {
+                $("#due_in").html("(Due in " + due_in + " " + unit + ")");
+                $("#due_in").removeClass("text-danger");
+            }
+        }
     });
     $("#category").editable({
         type: "select",
