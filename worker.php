@@ -78,45 +78,37 @@ if (in_array($action, $actions)) {
     }
 }
 
-//Define variables
-if (isset($_POST["item"])) {
-    $item = mysqli_real_escape_string($con, $_POST["item"]);
-} elseif (isset($_GET["item"])) {
-    $item = mysqli_real_escape_string($con, $_GET["item"]);
-}
-if (isset($_POST["details"])) {
-    $details = mysqli_real_escape_string($con, $_POST["details"]);
-} elseif (isset($_GET["details"])) {
-    $details = mysqli_real_escape_string($con, $_GET["details"]);
-}
-if (isset($_POST["category"])) {
-    $category = mysqli_real_escape_string($con, $_POST["category"]);
-} elseif (isset($_GET["category"])) {
-    $category = mysqli_real_escape_string($con, $_GET["category"]);
-}
-if (isset($_POST["new_category"])) {
-    $new_category = mysqli_real_escape_string($con, $_POST["new_category"]);
-} elseif (isset($_GET["new_category"])) {
-    $new_category = mysqli_real_escape_string($con, $_GET["new_category"]);
-}
-if (isset($_POST["due"])) {
-    $due = mysqli_real_escape_string($con, $_POST["due"]);
-} elseif (isset($_GET["due"])) {
-    $due = mysqli_real_escape_string($con, $_GET["due"]);
-}
-if (isset($_POST["pk"])) {
-    $pk = mysqli_real_escape_string($con, $_POST["pk"]);
-} elseif (isset($_GET["pk"])) {
-    $pk = mysqli_real_escape_string($con, $_GET["pk"]);
-}
-
 if ($action == "add") {
+    
+    //Define variables
+    if (isset($_POST["item"])) {
+        $item = mysqli_real_escape_string($con, $_POST["item"]);
+    } elseif (isset($_GET["item"])) {
+        $item = mysqli_real_escape_string($con, $_GET["item"]);
+    }
+    if (isset($_POST["details"])) {
+        $details = mysqli_real_escape_string($con, $_POST["details"]);
+    } elseif (isset($_GET["details"])) {
+        $details = mysqli_real_escape_string($con, $_GET["details"]);
+    }
+    if (isset($_POST["category"])) {
+        $category = mysqli_real_escape_string($con, $_POST["category"]);
+    } elseif (isset($_GET["category"])) {
+        $category = mysqli_real_escape_string($con, $_GET["category"]);
+    }
+    if (isset($_POST["due"])) {
+        $due = mysqli_real_escape_string($con, $_POST["due"]);
+    } elseif (isset($_GET["due"])) {
+        $due = mysqli_real_escape_string($con, $_GET["due"]);
+    }
 
     if (empty($item)) {
         die("Error: Data was empty!");
     }
 
     if (isset($_POST["priority"])) {
+        $priority = "1";
+    } elseif (isset($_GET["priority"])) {
         $priority = "1";
     } else {
         $priority = "0";
@@ -143,6 +135,12 @@ if ($action == "add") {
     echo "Info: Item added!";
 
 } elseif ($action == "addcategory") {
+    
+    if (isset($_POST["new_category"])) {
+        $new_category = mysqli_real_escape_string($con, $_POST["new_category"]);
+    } elseif (isset($_GET["new_category"])) {
+        $new_category = mysqli_real_escape_string($con, $_GET["new_category"]);
+    }
 
     if (empty($new_category)) {
         die("Error: Data was empty!");
@@ -153,8 +151,13 @@ if ($action == "add") {
 
     echo mysqli_insert_id($con);
 
-
 } elseif ($action == "edit") {
+    
+    if (isset($_POST["pk"])) {
+        $pk = mysqli_real_escape_string($con, $_POST["pk"]);
+    } elseif (isset($_GET["pk"])) {
+        $pk = mysqli_real_escape_string($con, $_GET["pk"]);
+    }
 
     if (isset($_POST["value"])) {
         $value = mysqli_real_escape_string($con, $_POST["value"]);
