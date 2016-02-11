@@ -155,9 +155,15 @@ $(document).ready(function() {
             url: "worker.php",
             data: "action=duein&id="+ id +"",
             error: function() {
-                console.log("Error: could not connect to worker!");
+                $("#due_in").addClass("text-danger");
+                $("#due_in").html("(Could not calculate due dates)");
             },
             success: function(due_in) {
+                if (due_in === null) {
+                    $("#due_in").addClass("text-danger");
+                    $("#due_in").html("(Could not calculate due dates)");
+                    return false;
+                }
                 $("#due_in").removeClass("text-danger");
                 if (due_in == 1) {
                     var unit = "day" 
@@ -185,7 +191,8 @@ $(document).ready(function() {
         url: "worker.php",
         data: "action=duein&id="+ id +"",
         error: function() {
-            console.log("Error: could not connect to worker!");
+            $("#due_in").addClass("text-danger");
+            $("#due_in").html("(Could not calculate due dates)");
         },
         success: function(due_in) {
             $("#due_in").removeClass("text-danger");
