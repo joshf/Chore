@@ -227,7 +227,21 @@ if ($action == "add") {
 } elseif ($action == "info") {
     $getitems = mysqli_query($con, "SELECT `id`, `category_id`, `priority`, `item`, `details`, `created`, `has_due`, `due`, `completed`, `date_completed` FROM `items` WHERE `id` = \"$id\"");
 
+    
     while($item = mysqli_fetch_assoc($getitems)) {
+        $getdue = mysqli_query($con, "SELECT `due` FROM `items` WHERE `id` = \"$id\"");
+        $getdueresults = mysqli_fetch_assoc($getdue);
+        $today = strtotime(date("Y-m-d"));
+        $due = strtotime($getdueresults["due"]);
+        $datediff = abs($today - $due);
+        $daysdiff = floor($datediff/(60*60*24));
+
+        if ($due < $today) {
+            $duein = "-" . $daysdiff . "";
+        } else {
+            $duein = $daysdiff;
+        }
+    
         $items[] = array(
             "id" => $item["id"],
             "category_id" => $item["category_id"],
@@ -237,6 +251,7 @@ if ($action == "add") {
             "created" => $item["created"],
             "has_due" => $item["has_due"],
             "due" => $item["due"],
+            "due_in" => $duein,
             "completed" => $item["completed"],
             "date_completed" => $item["date_completed"]
         );

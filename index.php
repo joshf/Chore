@@ -186,7 +186,7 @@ mysqli_close($con);
 <script type="text/javascript">
 $(document).ready(function () {
     var chore_version = "<?php echo $version; ?>";
-    if (!Cookies.get("chore_didcheckforupddates")) {
+    if (!Cookies.get("chore_didcheckforupdates")) {
         $.getJSON("https://api.github.com/repos/joshf/Chore/releases").done(function(resp) {
             var data = resp[0];
             var chore_remote_version = data.tag_name;
