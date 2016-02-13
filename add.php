@@ -156,8 +156,8 @@ $(document).ready(function() {
                         $("#category_holder").removeClass("hidden");
                     }
                 });
+                event.preventDefault();
             }
-            event.preventDefault();
         }
     });
     $("#add_category").click(function() {
