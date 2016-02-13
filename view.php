@@ -92,6 +92,11 @@ if (mysqli_num_rows($getitems) != 0) {
         }
 
         echo "<div class=\"btn-group\" role=\"group\">";
+        if ($item["priority"] == "1") {
+            echo "<button type=\"button\" id=\"togglepriority\" data-val=\"0\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-info-sign\" title=\"Normal Priority\" aria-hidden=\"true\"></span> Normal Priority</button>";
+        } else {
+            echo "<button type=\"button\" id=\"togglepriority\" data-val=\"1\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-exclamation-sign\" title=\"High Priority\" aria-hidden=\"true\"></span> High Priority</button>";
+        }
         if ($item["completed"] == "0") {
             echo "<button type=\"button\" id=\"complete\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-ok\" title=\"Complete\" aria-hidden=\"true\"></span> Complete</button>";
         } else {
@@ -263,6 +268,20 @@ $(document).ready(function() {
             },
             success: function() {
             	window.location.href = "index.php";
+            }
+        });
+    });
+    $("#togglepriority").click(function() {
+        var val = $(this).data("val");
+        $.ajax({
+            type: "POST",
+            url: "worker.php",
+            data: "action=edit&id="+ id +"&pk=5&value="+ val +"",
+            error: function() {
+                console.log("Error: could not connect to worker!");
+            },
+            success: function() {
+            	window.location.reload();
             }
         });
     });

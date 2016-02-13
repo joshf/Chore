@@ -191,6 +191,8 @@ if ($action == "add") {
         mysqli_query($con, "UPDATE `items` SET `has_due` = \"1\", `due` = \"$value\" WHERE `id` = \"$id\"");
     } elseif ($pk == "4") {
         mysqli_query($con, "UPDATE `items` SET `category_id` = \"$value\" WHERE `id` = \"$id\"");
+    } elseif ($pk == "5") {
+        mysqli_query($con, "UPDATE `items` SET `priority` = \"$value\" WHERE `id` = \"$id\"");
     } else {
         die("Error: Unknown key!");
     }
