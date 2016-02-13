@@ -148,8 +148,14 @@ if ($action == "add") {
 
     mysqli_query($con, "INSERT INTO `categories` (`category`)
     VALUES (\"$new_category\")");
+    
+    $id = mysqli_insert_id($con);
 
-    echo mysqli_insert_id($con);
+    $category[] = array(
+        "id" => $id
+    );
+
+    echo json_encode(array("category" => $category));
 
 } elseif ($action == "edit") {
     
@@ -273,7 +279,11 @@ if ($action == "add") {
         $duein = $daysdiff;
     }
     
-    echo $duein;
+    $item[] = array(
+        "duein" => $duein
+    );
+
+    echo json_encode(array("item" => $item));
 
 } elseif ($action == "generateapikey") {
     $api_key = substr(str_shuffle(MD5(microtime())), 0, 50);

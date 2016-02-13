@@ -139,6 +139,7 @@ $(document).ready(function() {
                     type: "POST",
                     url: "worker.php",
                     data: "action=addcategory&new_category="+ new_category +"",
+                    dataType: "json",
                     error: function() {
                         $.notify({
                             message: "Ajax query failed!",
@@ -148,9 +149,9 @@ $(document).ready(function() {
                             allow_dismiss: true
                         });
                     },
-                    success: function(id) {
+                    success: function(resp) {
                         $("#new_category").prop("disabled", true);
-                        $("#category").append("<option value=\"" + id + "\" selected=\"selected\">" + new_category + "</option>");
+                        $("#category").append("<option value=\"" + resp.category[0].id + "\" selected=\"selected\">" + new_category + "</option>");
                         $("#new_category_holder").addClass("hidden");
                         $("#category_holder").removeClass("hidden");
                     }

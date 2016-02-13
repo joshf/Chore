@@ -154,11 +154,13 @@ $(document).ready(function() {
             type: "POST",
             url: "worker.php",
             data: "action=duein&id="+ id +"",
+            dataType: "json",
             error: function() {
                 $("#due_in").addClass("text-danger");
                 $("#due_in").html("(Could not calculate due dates)");
             },
-            success: function(due_in) {
+            success: function(resp) {
+                var due_in = resp.item[0].duein;
                 if (due_in === null) {
                     $("#due_in").addClass("text-danger");
                     $("#due_in").html("(Could not calculate due dates)");
@@ -190,11 +192,13 @@ $(document).ready(function() {
         type: "POST",
         url: "worker.php",
         data: "action=duein&id="+ id +"",
+        dataType: "json",
         error: function() {
             $("#due_in").addClass("text-danger");
             $("#due_in").html("(Could not calculate due dates)");
         },
-        success: function(due_in) {
+        success: function(resp) {
+            var due_in = resp.item[0].duein;
             $("#due_in").removeClass("text-danger");
             if (due_in == 1) {
                 var unit = "day" 
