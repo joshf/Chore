@@ -37,9 +37,9 @@ if (isset($_POST["install"])) {
 
     //Create items table
     $createitemstable = "CREATE TABLE `items` (
-    `id` int(8) NOT NULL,
+    `id` int(8) NOT NULL AUTO_INCREMENT,
     `category_id` int(4) NOT NULL,
-    `priority` tinyint(1) NOT NULL,
+    `priority` tinyint(1) NOT NULL DEFAULT \"0\",
     `item` varchar(300) NOT NULL,
     `details` varchar(300) NOT NULL,
     `created` date NOT NULL,
@@ -54,7 +54,7 @@ if (isset($_POST["install"])) {
 
     //Create users table
     $createuserstable = "CREATE TABLE `users` (
-    `id` int(8) NOT NULL,
+    `id` int(8) NOT NULL AUTO_INCREMENT,
     `user` varchar(20) NOT NULL,
     `password` varchar(200) NOT NULL,
     `salt` varchar(3) NOT NULL,
@@ -68,20 +68,12 @@ if (isset($_POST["install"])) {
 
     //Create categories table
     $createcategoriestable = "CREATE TABLE `categories` (
-    `id` int(8) NOT NULL,
+    `id` int(8) NOT NULL AUTO_INCREMENT,
     `category` varchar(30) NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB;";
 
     mysqli_query($con, $createcategoriestable) or die(mysqli_error($con));
-
-    //Add keys
-    mysqli_query($con, "ALTER TABLE `items` ADD PRIMARY KEY (`id`)");
-    mysqli_query($con, "ALTER TABLE `users` ADD PRIMARY KEY (`id`)");
-    mysqli_query($con, "ALTER TABLE `categories` ADD PRIMARY KEY (`id`)");
-    mysqli_query($con, "ALTER TABLE `items` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
-    mysqli_query($con, "ALTER TABLE `users` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
-    mysqli_query($con, "ALTER TABLE `categories` CHANGE `id` `id` INT(8) NOT NULL AUTO_INCREMENT");
 
     mysqli_query($con, "INSERT INTO `users` (user, password, salt, email, hash, api_key)
     VALUES (\"$user\",\"$password\",\"$salt\",\"$email\",\"\",\"$api_key\")");
