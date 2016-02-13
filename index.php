@@ -105,7 +105,13 @@ if (isset($_GET["filter"])) {
 $getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
 
 while($category = mysqli_fetch_assoc($getcategories)) {
-        echo "<option value=\"index.php?filter=categories&amp;cat=" . $category["id"] . "\">" . ucfirst($category["category"]) . "</option>";
+    $getcounts = mysqli_query($con, "SELECT COUNT(category_id) AS `count` FROM `items` WHERE `completed` = \"0\" AND `category_id` = \"" . $category["id"] . "\"");
+    $resultscount = mysqli_fetch_assoc($getcounts);
+    $count = $resultscount["count"];
+    
+    if ($count > 0) {
+        echo "<option value=\"index.php?filter=categories&amp;cat=" . $category["id"] . "\">" . ucfirst($category["category"]) . " ($count)</option>";
+    }
 }
 
 ?>
