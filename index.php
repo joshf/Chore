@@ -98,16 +98,21 @@ if (isset($_GET["filter"])) {
 <option value="index.php?filter=overdue">Overdue</option>
 </optgroup>
 <optgroup label="Categories">
-<option value="index.php?filter=categories&amp;cat=none">No Category</option>
 <?php
+
+$getnocatcounts = mysqli_query($con, "SELECT COUNT(category_id) AS `count` FROM `items` WHERE `completed` = \"0\" AND `category_id` = \"0\"");
+$resultscatcounts = mysqli_fetch_assoc($getnocatcounts);
+$no_cat_count = $resultscatcounts["count"];
+  
+echo "<option value=\"index.php?filter=categories&amp;cat=none\">No Category ($no_cat_count)</option>";
 
 //Get categories
 $getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
 
 while($category = mysqli_fetch_assoc($getcategories)) {
     $getcounts = mysqli_query($con, "SELECT COUNT(category_id) AS `count` FROM `items` WHERE `completed` = \"0\" AND `category_id` = \"" . $category["id"] . "\"");
-    $resultscount = mysqli_fetch_assoc($getcounts);
-    $count = $resultscount["count"];
+    $resultscounts = mysqli_fetch_assoc($getcounts);
+    $count = $resultscounts["count"];
     
     if ($count > 0) {
         echo "<option value=\"index.php?filter=categories&amp;cat=" . $category["id"] . "\">" . ucfirst($category["category"]) . " ($count)</option>";
