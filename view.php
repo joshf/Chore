@@ -128,6 +128,11 @@ $(document).ready(function() {
         type: "text",
         pk: 1,
         title: "Item",
+        validate: function (value) {
+            if (value === null || value === "") {
+                return "Item cannot be blank!"
+            }
+        }
     });
     $("#details").editable({
         type: "text",
@@ -139,6 +144,7 @@ $(document).ready(function() {
         datepicker: {
             autoclose: true,
             todayHighlight: true,
+            startDate: new Date()
         },
         pk: 3,
         title: "Due",
