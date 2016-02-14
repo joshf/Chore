@@ -16,7 +16,12 @@ if (mysqli_connect_errno()) {
 
 //Get path to Chore
 $currenturl = $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-$pathtoscriptwithslash = "http://" . substr($currenturl, 0, strpos($currenturl, "reset.php"));
+if (isset($_SERVER["HTTPS"])) {
+    $protocol = "https://";
+} else {
+    $protocol = "http://";
+}
+$pathtoscriptwithslash = "$protocol" . substr($currenturl, 0, strpos($currenturl, "reset.php"));
 $pathtoscript = rtrim($pathtoscriptwithslash, "/");
 
 //Check that passed email and hash are correct
