@@ -93,7 +93,6 @@ if (isset($_GET["filter"])) {
 <option value="index.php">No Filter</option>
 <optgroup label="Filters">
 <option value="index.php?filter=priority">High Priority Tasks</option>
-<option value="index.php?filter=completed">Completed Tasks</option>
 <option value="index.php?filter=duetoday">Due Today</option>
 <option value="index.php?filter=overdue">Overdue</option>
 </optgroup>
@@ -125,6 +124,7 @@ while($category = mysqli_fetch_assoc($getcategories)) {
 <option value="index.php?filter=date">Due Date</option>
 <option value="index.php?filter=created">Created Date</option>
 </optgroup>
+<option value="index.php?filter=completed">Completed Tasks</option>
 </select>
 </div>
 </div>
@@ -180,7 +180,14 @@ if (mysqli_num_rows($getitems) != 0) {
         if ($item["category"] != "") {
             echo "<span class=\"hidden-xs badge badge-blue\">" . $item["category"] . "</span> ";
         }
-        echo "<span class=\"complete glyphicon glyphicon-ok\" title=\"Complete\" data-id=\"" . $item["id"] . "\"></span></div></li>";
+                
+        if ($filter == "completed") {
+            echo "<span class=\"delete glyphicon glyphicon-remove\" title=\"Delete\" data-id=\"" . $item["id"] . "\"></span>";
+        } else {
+            echo "<span class=\"complete glyphicon glyphicon-ok\" title=\"Complete\" data-id=\"" . $item["id"] . "\"></span>";
+        }
+        echo "</div></li>";
+        
     }
 } else {
     echo "<li class=\"list-group-item\">No items to show</li>";
@@ -263,6 +270,37 @@ $(document).ready(function () {
             success: function() {
                 $.notify({
                     message: "Item completed!",
+                    icon: "glyphicon glyphicon-ok",
+                },{
+                    type: "success",
+                    allow_dismiss: true
+                });
+                $(element).hide();
+                setTimeout(function() {
+                    $(element).remove();
+                }, 500);
+            }
+        });
+    });
+    $("li").on("click", ".delete", function() {
+        var id = $(this).data("id");
+        var element = $(this).parent().parent();
+        $.ajax({
+            type: "POST",
+            url: "worker.php",
+            data: "action=delete&id="+ id +"",
+            error: function() {
+                $.notify({
+                    message: "Ajax query failed!",
+                    icon: "glyphicon glyphicon-warning-sign",
+                },{
+                    type: "danger",
+                    allow_dismiss: true
+                });
+            },
+            success: function() {
+                $.notify({
+                    message: "Item deleted!",
                     icon: "glyphicon glyphicon-ok",
                 },{
                     type: "success",
