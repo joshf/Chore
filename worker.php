@@ -163,6 +163,8 @@ if ($action == "add") {
         $pk = mysqli_real_escape_string($con, $_POST["pk"]);
     } elseif (isset($_GET["pk"])) {
         $pk = mysqli_real_escape_string($con, $_GET["pk"]);
+    } else {
+        die("Error: No primary key passed!");
     }
 
     if (isset($_POST["value"])) {
