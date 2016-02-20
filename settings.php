@@ -65,6 +65,7 @@ if (!empty($_POST)) {
 <link rel="apple-touch-icon" href="assets/icon.png">
 <link rel="stylesheet" href="assets/bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="screen">
 <link rel="stylesheet" href="assets/css/chore.css" type="text/css" media="screen">
+<link rel="stylesheet" href="assets/bower_components/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" type="text/css" media="screen">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -99,11 +100,15 @@ if (!empty($_POST)) {
 <ul id="categories" class="list-group">
 <?php
 
-$getcategories = mysqli_query($con, "SELECT `id`, `category` FROM `categories`");
+$getcategories = mysqli_query($con, "SELECT `id`, `category`, `colour` FROM `categories`");
 
 if (mysqli_num_rows($getcategories) != 0) {
     while($category = mysqli_fetch_assoc($getcategories)) {
-        echo "<li class=\"list-group-item\">" . $category["category"] . " <span class=\"pull-right delete glyphicon glyphicon-remove\" data-id=\"" . $category["id"] . "\"></span></li>";
+        if ($item["colour"] != "") {
+            echo "<li class=\"list-group-item\"><span>" . $category["category"] . "</span><span class=\"pull-right\"><span class=\"colour glyphicon glyphicon-eye-open\" data-id=\"" . $category["id"] . "\"></span> <span class=\"delete glyphicon glyphicon-remove\" data-id=\"" . $category["id"] . "\"></span></span></li>";
+        } else {
+            echo "<li class=\"list-group-item\"><span>" . $category["category"] . "</span><span class=\"pull-right\"><span class=\"colour glyphicon glyphicon-eye-open\" style=\"color: " . $category["colour"] . "\" data-id=\"" . $category["id"] . "\"></span> <span class=\"delete glyphicon glyphicon-remove\" data-id=\"" . $category["id"] . "\"></span></span></li>";
+        }
     }
 } else {
     echo "<li class=\"list-group-item\">No categories to show</li>";
@@ -131,6 +136,7 @@ mysqli_close($con);
 <script src="assets/bower_components/bootstrap-validator/dist/validator.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/bower_components/js-cookie/src/js.cookie.js" type="text/javascript" charset="utf-8"></script>
+<script src="assets/bower_components/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     var chore_version = "<?php echo $version; ?>";
@@ -245,6 +251,28 @@ $(document).ready(function() {
     });
     $("#logout").click(function() {
         window.location.href = "logout.php";
+    });
+    $(".colour").colorpicker().on("changeColor.colorpicker", function(event) {
+        var id = $(this).data("id");
+        var colour = event.color.toHex();
+        var element = $(this);        
+        $.ajax({
+            type: "POST",
+            url: "worker.php",
+            data: "action=colour&id="+ id +"&colour="+ colour +"",
+            error: function() {
+                $.notify({
+                    message: "Ajax query failed!",
+                    icon: "glyphicon glyphicon-warning-sign",
+                },{
+                    type: "danger",
+                    allow_dismiss: true
+                });
+            },
+            success: function() {
+                $(element).css("color", colour);
+            }
+        });        
     });
 });
 </script>

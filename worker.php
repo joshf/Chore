@@ -55,7 +55,7 @@ if (isset($_POST["action"])) {
 }
 
 //Check if ID exists
-$actions = array("complete", "restore", "delete", "info", "edit", "duein", "deletecategory");
+$actions = array("complete", "restore", "delete", "info", "edit", "duein", "deletecategory", "colour");
 if (in_array($action, $actions)) {
     if (isset($_POST["id"]) || isset($_GET["id"])) {
         if (isset($_POST["action"])) {
@@ -64,7 +64,7 @@ if (in_array($action, $actions)) {
             $id = mysqli_real_escape_string($con, $_GET["id"]);
         }
 
-        if ($action == "deletecategory") {
+        if ($action == "deletecategory" || $action == "colour") {
             $checkid = mysqli_query($con, "SELECT `id` FROM `categories` WHERE `id` = $id");
         } else {
             $checkid = mysqli_query($con, "SELECT `id` FROM `items` WHERE `id` = $id");
@@ -289,6 +289,20 @@ if ($action == "add") {
 
     echo json_encode(array("item" => $item));
 
+} elseif ($action == "colour") {
+    
+    if (isset($_POST["colour"])) {
+        $colour = mysqli_real_escape_string($con, $_POST["colour"]);
+    } elseif (isset($_GET["colour"])) {
+        $colour = mysqli_real_escape_string($con, $_GET["colour"]);
+    } else {
+        die("Error: No colour passed!");
+    }
+    
+    mysqli_query($con, "UPDATE `categories` SET `colour` = \"$colour\" WHERE `id` = \"$id\"");
+    
+    echo "Info: Category colour changed to $colour!";
+    
 } elseif ($action == "generateapikey") {
     $api_key = substr(str_shuffle(MD5(microtime())), 0, 50);
     mysqli_query($con, "UPDATE `users` SET `api_key` = \"$api_key\" WHERE `id` = \"" . $_SESSION["chore_user"] . "\"");

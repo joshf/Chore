@@ -1,4 +1,4 @@
-#add, #settings, #logout, .complete, .delete, #addcategory, .list {
+#add, #settings, #logout, .complete, .delete, #addcategory, .item, .colour {
     cursor: pointer;
 }
 li.pull-right:before {
@@ -55,16 +55,4 @@ li.pull-right:before {
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
-}
-.badge-green {
-    background-color: #3c763d;
-}
-.badge-red {
-    background-color: #a94442;
-}
-.badge-yellow {
-    background-color: #8a6d3b;
-}
-.badge-blue {
-    background-color: #31708f;
 }

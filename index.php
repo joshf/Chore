@@ -133,25 +133,25 @@ while($category = mysqli_fetch_assoc($getcategories)) {
 <?php
 
 if ($filter == "completed") {
-    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"1\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.colour, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"1\"");
 } elseif ($filter == "priority") {
-    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.priority = \"1\" AND items.completed = \"0\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.colour, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.priority = \"1\" AND items.completed = \"0\"");
 } elseif ($filter == "categories") {
     if ($cat_id == "") {
-    	$getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.category_id = \"0\"");
+    	$getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.colour, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.category_id = \"0\"");
     } else {
-    	$getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND categories.id = \"$cat_id\"");
+    	$getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.colour, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND categories.id = \"$cat_id\"");
     }
 } elseif ($filter == "date") {
-	$getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.has_due = \"1\" ORDER BY items.due ASC");
+	$getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.colour, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.has_due = \"1\" ORDER BY items.due ASC");
 } elseif ($filter == "duetoday") {
-    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.due = CURDATE() AND items.has_due = \"1\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.colour, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.due = CURDATE() AND items.has_due = \"1\"");
 } elseif ($filter == "overdue") {
-    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.due < CURDATE() AND items.has_due = \"1\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.colour, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" AND items.due < CURDATE() AND items.has_due = \"1\"");
 } elseif ($filter == "created") {
-	$getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" ORDER BY items.created ASC");
+	$getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.colour, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\" ORDER BY items.created ASC");
 } else {
-    $getitems = mysqli_query($con, "SELECT items.id, categories.category, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\"");
+    $getitems = mysqli_query($con, "SELECT items.id, categories.category, categories.colour, items.priority, items.item, items.has_due, items.due FROM `items` LEFT JOIN `categories` ON categories.id = items.category_id WHERE items.completed = \"0\"");
 }
 
 if (mysqli_num_rows($getitems) != 0) {
@@ -161,7 +161,7 @@ if (mysqli_num_rows($getitems) != 0) {
         $today = strtotime(date("Y-m-d"));
         $due = strtotime($item["due"]);
 
-        echo "<li class=\"list-group-item\"><span class=\"list\" data-id=\"" . $item["id"] . "\">";
+        echo "<li class=\"list-group-item\"><span class=\"item\" data-id=\"" . $item["id"] . "\">";
 
         if ($item["priority"] == "1") {
            echo "<b>" . $item["item"] . "</b>";
@@ -178,7 +178,11 @@ if (mysqli_num_rows($getitems) != 0) {
             }
         }
         if ($item["category"] != "") {
-            echo "<span class=\"hidden-xs badge badge-blue\">" . $item["category"] . "</span> ";
+            if ($item["colour"] != "") {
+                echo "<span class=\"hidden-xs badge\" style=\"background-color: " . $item["colour"] . "\">" . $item["category"] . "</span> ";
+            } else {
+                echo "<span class=\"hidden-xs badge\">" . $item["category"] . "</span> ";
+            }
         }
                 
         if ($filter == "completed") {
@@ -322,7 +326,7 @@ $(document).ready(function () {
     $("#logout").click(function() {
         window.location.href = "logout.php";
     });
-    $("li").on("click", ".list", function() {
+    $("li").on("click", ".item", function() {
         var id = $(this).data("id");
         window.location.href = "view.php?item="+id;
     });
