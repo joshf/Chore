@@ -107,7 +107,7 @@ if (mysqli_num_rows($getcategories) != 0) {
         if ($item["colour"] != "") {
             echo "<li class=\"list-group-item\"><span>" . $category["category"] . "</span><span class=\"pull-right\"><span class=\"colour glyphicon glyphicon-eye-open\" data-id=\"" . $category["id"] . "\"></span> <span class=\"delete glyphicon glyphicon-remove\" data-id=\"" . $category["id"] . "\"></span></span></li>";
         } else {
-            echo "<li class=\"list-group-item\"><span>" . $category["category"] . "</span><span class=\"pull-right\"><span class=\"colour glyphicon glyphicon-eye-open\" style=\"color: " . $category["colour"] . "\" data-id=\"" . $category["id"] . "\"></span> <span class=\"delete glyphicon glyphicon-remove\" data-id=\"" . $category["id"] . "\"></span></span></li>";
+            echo "<li class=\"list-group-item\"><span>" . $category["category"] . "</span><span class=\"pull-right\"><span class=\"colour glyphicon glyphicon-eye-open\" style=\"color: " . $category["colour"] . "\" data-id=\"" . $category["id"] . "\" data-colour=\"" . $category["colour"] . "\"></span> <span class=\"delete glyphicon glyphicon-remove\" data-id=\"" . $category["id"] . "\"></span></span></li>";
         }
     }
 } else {
@@ -251,7 +251,7 @@ $(document).ready(function() {
     });
     $("#logout").click(function() {
         window.location.href = "logout.php";
-    });
+    });    
     $(".colour").colorpicker().on("changeColor.colorpicker", function(event) {
         var id = $(this).data("id");
         var colour = event.color.toHex();
@@ -270,9 +270,13 @@ $(document).ready(function() {
                 });
             },
             success: function() {
-                $(element).css("color", colour);
+                $(element).css("color", colour);                
             }
         });        
+    });
+    $(".colour").each(function(i, obj) {
+        var rawcolour = $(this).data("colour");
+        $(this).colorpicker("setValue", rawcolour);
     });
 });
 </script>
